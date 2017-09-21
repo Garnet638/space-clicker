@@ -1,0 +1,71 @@
+h1 {
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 80px
+}
+
+.center {
+  text-align: center;
+}
+
+.desc {
+  font-style: italic;
+  color: #666;
+  padding-left: 7px !important;
+}
+
+.amnt {
+  text-align: right !important;
+}
+
+#game-left {
+  left: 100px;
+}
+
+#tabs {
+  border-collapse: collapse;
+  position:relative;
+  top: 1px;
+}
+
+#tabs tr td {
+  font-family: 'Roboto Slab', sans-serif;
+  border: 3px solid black;
+  text-align: center;
+  width: 150px;
+  height: 30px;
+}
+
+#tabs tr td.selected {
+  text-shadow: 2px 0 0 #000000, -2px 0 0 #000000, 0 2px 0 #000000, 0 -2px 0 #000000, 1px 1px #000000, -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000;
+  border: 3px solid black;
+  border-bottom: none;
+  color: white;
+}
+#rockets {
+}
+
+#rockets tr td {
+  text-align: left;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#rockets tr:first-child {
+  border: 2px solid black;
+  text-align: center;
+}
+
+#rockets tr td:last-child {
+}
+
+#rockets tr td:first-child {
+  border: 2px solid black;
+  text-align: center;
+  font-weight: bold;
+  width: 200px;
+  height: 35px;
+}
+
+#rockets td {
+  font-family: 'Roboto', sans-serif;
+}

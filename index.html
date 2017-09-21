@@ -1,1 +1,40 @@
-<h1>test</h1>
+<html>
+  <head>
+    <title>Space Clicker</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <script src="jquery.js"></script>
+    <script src="game.js"></script>
+  </head>
+  <body>
+    <h1 class="center">Space Clicker</h1>
+
+    <div id="game-left">
+
+      <table id="tabs">
+        <tr>
+          <td class="selected"><a onclick="tab('rockets');">Rockets</a></td>
+          <td><a onclick="tab('jobs');">Jobs</a></td>
+          <td><a onclick="tab('colonies');">Colonies</a></td>
+        </tr>
+      </table>
+
+      <table id="rockets">
+        <tr id="areaSlingshot">
+          <td onclick="build('slingshot')">Build Slingshot</td>
+          <td >Slingshots:</td>
+          <td id="amntSlingshot" class="amnt">0</td>
+          <td id="descSlingshot" class="desc">10 ambition; +1 ambition/10 seconds</td>
+        </tr>
+        <tr id="areaBottleRocket">
+          <td onclick="build('bottlerocket')">Bottle Rocket</td>
+          <td >Bottle Rockets:</td>
+          <td id="amntSlingshot" class="amnt">0</td>
+          <td id="descSlingshot" class="desc">$5; +1 experience/5 seconds</td>
+        </tr>
+      </table>
+
+
+    </div>
+  </body>
+</html>
