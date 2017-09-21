@@ -30,6 +30,7 @@ h1 {
 #tabs tr td {
   font-family: 'Roboto Slab', sans-serif;
   border: 3px solid black;
+  background-color: #ddd;
   text-align: center;
   width: 150px;
   height: 30px;
@@ -38,6 +39,7 @@ h1 {
 #tabs tr td.selected {
   text-shadow: 2px 0 0 #000000, -2px 0 0 #000000, 0 2px 0 #000000, 0 -2px 0 #000000, 1px 1px #000000, -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000;
   border: 3px solid black;
+  background-color: #fff;
   border-bottom: none;
   color: white;
 }

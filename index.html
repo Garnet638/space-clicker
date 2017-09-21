@@ -13,13 +13,13 @@
 
       <table id="tabs">
         <tr>
-          <td class="selected"><a onclick="tab('rockets');">Rockets</a></td>
-          <td><a onclick="tab('jobs');">Jobs</a></td>
-          <td><a onclick="tab('colonies');">Colonies</a></td>
+          <td class="selected" id="tabRockets" onclick="tab('rockets');"><a>Rockets</a></td>
+          <td id="tabJobs" onclick="tab('jobs');"><a>Jobs</a></td>
+          <td id="tabColonies" onclick="tab('colonies');"><a>Colonies</a></td>
         </tr>
       </table>
 
-      <table id="rockets">
+      <table id="rockets" class="gameTab">
         <tr id="areaSlingshot">
           <td onclick="build('slingshot')">Build Slingshot</td>
           <td >Slingshots:</td>
@@ -30,10 +30,18 @@
           <td onclick="build('bottlerocket')">Bottle Rocket</td>
           <td >Bottle Rockets:</td>
           <td id="amntSlingshot" class="amnt">0</td>
-          <td id="descSlingshot" class="desc">$5; +1 experience/5 seconds</td>
+          <td id="descSlingshot" class="desc">5 dolans; +1 experience/5 seconds</td>
         </tr>
       </table>
 
+      <table id="jobs" class="gameTab" style="display:none;">
+        <tr id="areaBottleRocket">
+          <td onclick="build('bottlerocket')">Bottle Rocket</td>
+          <td >Bottle Rockets:</td>
+          <td id="amntSlingshot" class="amnt">0</td>
+          <td id="descSlingshot" class="desc">5 dolans; +1 experience/5 seconds</td>
+        </tr>
+      </table>
 
     </div>
   </body>
