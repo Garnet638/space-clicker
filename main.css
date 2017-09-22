@@ -14,6 +14,13 @@ h1 {
   color: white;
 }
 
+h4 {
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 0 5px #000, 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 30px;
+  color: white;
+}
+
 body {
   background-image: url("bkg.jpg");
   background-size: cover;
@@ -36,6 +43,11 @@ tr.spacer {
   height: 5px !important;
 }
 
+.multiplier {
+  font-size: 15px;
+  color: #0c0;
+}
+
 .center {
   text-align: center;
 }
@@ -55,7 +67,28 @@ tr.spacer {
   height: 29px;
 }
 
+.smolbutton {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Safari */
+   -khtml-user-select: none;   /* Konqueror HTML */
+     -moz-user-select: none;   /* Firefox */
+      -ms-user-select: none;   /* Internet Explorer/Edge */
+          user-select: none;   /* Chrome/Future-proofing */
+  text-align: center !important;
+  border: 2px solid black;
+  background-color: #ccc;
+  font-weight: bold;
+  /*width: 200px;*/
+  height: 29px;
+}
+
 .button.greyed-out {
+  text-shadow: 2px 0 0 #444, -2px 0 0 #444, 0 2px 0 #444, 0 -2px 0 #444, 1px 1px #444, -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444;
+  background-color: #777;
+  color: #aaa;
+}
+
+.smolbutton.greyed-out {
   text-shadow: 2px 0 0 #444, -2px 0 0 #444, 0 2px 0 #444, 0 -2px 0 #444, 1px 1px #444, -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444;
   background-color: #777;
   color: #aaa;
@@ -75,6 +108,13 @@ tr.spacer {
 
 .amnt {
   text-align: right !important;
+}
+
+#upgradesBought{
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  color: white;
 }
 
 #info {
@@ -178,37 +218,21 @@ tr.spacer {
   color: white;
 }
 
-#rockets tr {
-
-}
-
-#rockets tr td {
+.upgradeTable tr td {
   text-align: left;
   padding-left: 7px;
   padding-right: 7px;
 }
 
-#rockets tr:first-child {
+.upgradeTable tr:first-child {
   border: 2px solid black;
   text-align: center;
 }
 
-#rockets tr td:first-child {
+.upgradeTable tr td:first-child {
   border: 2px solid black;
   text-align: center;
   font-weight: bold;
   width: 200px;
   height: 35px;
-}
-
-#jobs tr td {
-  text-align: left;
-  padding-left: 7px;
-  padding-right: 7px;
-  height: 35px;
-}
-
-#jobs tr:first-child {
-  border: 2px solid black;
-  text-align: center;
 }

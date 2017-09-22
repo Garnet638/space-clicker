@@ -1,4 +1,23 @@
-# Version 0.0.6a
+# Version 0.7.0a
+## 04:52PM, 09/23/2017
+Revised version numbering
+
+Added 2 more rockets
+
+Added 1 more job
+
+Added 3 new upgrades
+
+Upgrades now fully functioning
+
+Rocket tiers now fully functioning
+
+#### NOTE:
+Saving/Loading is not fully implemented yet, but the code still exists for it.
+Please refrain from calling the methods.
+
+
+# Version 0.6.0a
 ## 09:XXPM, 09/21/2017
 Added CHANGELOG.md
 
@@ -15,26 +34,26 @@ Prettified some more
 Every second you get items
 
 
-# Version 0.0.5a
+# Version 0.5.0a
 ## 09:XXPM, 09/21/2017
 GUI is fully working, made it more pretty
 
 
-# Version 0.0.4a
+# Version 0.4.0a
 ## 01:XXAM, 09/21/2017
 Added tab functionality
 
 
-# Version 0.0.3a
+# Version 0.3.0a
 ## 12:XXPM, 09/20/2017
 Finished basic framework
 
 
-# Version 0.0.2a
+# Version 0.2.0a
 ## 11:XXPM, 09/20/2017
 Created index.html
 
 
-# Version 0.0.1a
+# Version 0.1.0a
 ## 11:XXPM, 09/20/2017
 Initial commit

@@ -1,12 +1,20 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Space Clicker</title>
+
+    <meta charset="UTF-8">
+    <meta name="description" content="Click your way to space!">
+    <meta name="keywords" content="idle game, idler game, game, free game, space, ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
     <script src="jquery.js"></script>
     <script src="game.js"></script>
     <script>
       $(function(){
+        initGame();
         window.setInterval(updateGame, 1000);
       });
     </script>
@@ -16,8 +24,10 @@
 
     <div id="credits">
       <p>
-        Made by <a href="" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
-        View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a>
+        Version 0.7.0a<br />
+        Made by <a href="#" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
+        View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a><br />
+        View on <a href="https://trello.com/b/13JK4tRf/space-clicker">Trello</a>
       </p>
     </div>
 
@@ -29,11 +39,13 @@
           <td onclick="work('ambition')" class="button">Stare at sky</td>
           <td>Ambition: </td>
           <td id="ambitionCount" class="cashCount">0</td>
+          <td id="ambitionMult" class="multiplier"></td>
         </tr>
         <tr>
           <td onclick="work('dolans')" class="button" id="jobTitle">Work</td>
           <td>Dolans: </td>
           <td id="dolansCount" class="cashCount">0</td>
+          <td id="dolansMult" class="multiplier"></td>
         </tr>
       </table>
 
@@ -43,6 +55,7 @@
         <tr>
           <td id="experienceLabel">Experience: </td>
           <td id="experienceCount" class="cashCount">0</td>
+          <td id="experienceMult" class="multiplier"></td>
           <td class="spacer"></td>
           <td id="dnaLabel">???: </td>
           <td id="dnaCount" class="cashCount">0</td>
@@ -58,47 +71,27 @@
         <tr>
           <td class="selectedTab gameTabSelector" id="tabrockets" onclick="tab('rockets');"><a>Rockets</a></td>
           <td class="gameTabSelector" id="tabjobs" onclick="tab('jobs');"><a>Jobs</a></td>
-          <td class="gameTabSelector" id="tabcolonies" onclick="tab('upgrades');"><a>Upgrades</a></td>
+          <td class="gameTabSelector" id="tabupgrades" onclick="tab('upgrades');"><a>Upgrades</a></td>
         </tr>
       </table>
 
-      <table id="rockets" class="gameTab">
-        <tr class="spacer"></tr>
-        <tr id="areaSlingshot">
-          <td id="slingshotButton" onclick="build('slingshot')" class="button greyed-out">Build Slingshot</td>
-          <td >Slingshots:</td>
-          <td id="amntslingshot" class="amnt">0</td>
-          <td class="desc">10 ambition;  +1 ambition/10 seconds</td>
-        </tr><tr class="spacer"></tr>
-        <tr id="areaBottleRocket">
-          <td id="bottlerocketButton" onclick="build('bottlerocket')" class="button greyed-out">Bottle Rocket</td>
-          <td >Bottle Rockets:</td>
-          <td id="amntbottlerocket" class="amnt">0</td>
-          <td class="desc">5 dolans;  +1 experience/5 seconds</td>
-        </tr><tr class="spacer"></tr>
-      </table>
+      <div id="rockets" class="gameTab">
+        <table id="rocketsTable" class="upgradeTable">
+          <tr></tr>
+        </table>
+      </div>
 
-      <table id="jobs" class="gameTab" style="display:none;">
-        <tr class="spacer"></tr>
-        <tr id="areaBottleRocket">
-          <td id="mcdoodlesButton" onclick="getJob('mcdoodles')" class="button greyed-out">Work at McDoodles</td>
-          <td >McDoodles:</td>
-          <td class="amnt">+1 dolans/click</td>
-          <td class="desc">15 experience</td>
-        </tr><tr class="spacer"></tr>
-      </table>
+      <div id="jobs" class="gameTab" style="display:none;">
+        <table id="jobsTable" class="upgradeTable">
+        </table>
+      </div>
 
-      <table id="upgrades" class="gameTab" style="display:none;">
-        <tr class="spacer"></tr>
-        <tr id="areaAlgebra">
-          <td id="algebraButton" onclick="getUpgrade('algebra')" class="button greyed-out">Learn Algebra</td>
-          <td class="amnt">Rockets gain x2 dolans, experience</td>
-          <td class="desc">1000 experience</td>
-        </tr><tr class="spacer"></tr>
-        <tr id="learnedUpgrades">
-          <tr><h4>Upgrades gotten</h4></tr>
-        </tr>
-      </table>
+      <div id="upgrades" class="gameTab" style="display:none;">
+        <table id="upgradesTable" class="upgradeTable">
+        </table>
+        <h4>Upgrades Bought</h4>
+        <p id="upgradesBought"></p>
+      </div>
 
     </div>
   </body>
