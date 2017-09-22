@@ -1,2 +1,2 @@
-# Space Clicker 0.0.1a
+# Space Clicker 0.0.6a
 ### By Gabriel Ch

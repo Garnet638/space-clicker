@@ -5,48 +5,98 @@
     <link href="main.css" rel="stylesheet">
     <script src="jquery.js"></script>
     <script src="game.js"></script>
+    <script>
+      $(function(){
+        window.setInterval(updateGame, 1000);
+      });
+    </script>
   </head>
   <body>
     <h1 class="center">Space Clicker</h1>
 
     <div id="credits">
       <p>
-        Made by <a href="https://gabrielch.com/">Gabriel Ch.</a><br />
+        Made by <a href="" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
         View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a>
       </p>
     </div>
 
     <div id="game-left">
 
+
+      <table id="info">
+        <tr>
+          <td onclick="work('ambition')" class="button">Stare at sky</td>
+          <td>Ambition: </td>
+          <td id="ambitionCount" class="cashCount">0</td>
+        </tr>
+        <tr>
+          <td onclick="work('dolans')" class="button" id="jobTitle">Work</td>
+          <td>Dolans: </td>
+          <td id="dolansCount" class="cashCount">0</td>
+        </tr>
+      </table>
+
+      <br />
+
+      <table id="extraCurrency">
+        <tr>
+          <td id="experienceLabel">Experience: </td>
+          <td id="experienceCount" class="cashCount">0</td>
+          <td class="spacer"></td>
+          <td id="dnaLabel">???: </td>
+          <td id="dnaCount" class="cashCount">0</td>
+        </tr>
+        <tr>
+
+        </tr>
+      </table>
+
+      <br />
+
       <table id="tabs">
         <tr>
           <td class="selectedTab gameTabSelector" id="tabrockets" onclick="tab('rockets');"><a>Rockets</a></td>
           <td class="gameTabSelector" id="tabjobs" onclick="tab('jobs');"><a>Jobs</a></td>
-          <td class="gameTabSelector" id="tabcolonies" onclick="tab('colonies');"><a>Colonies</a></td>
+          <td class="gameTabSelector" id="tabcolonies" onclick="tab('upgrades');"><a>Upgrades</a></td>
         </tr>
       </table>
 
       <table id="rockets" class="gameTab">
+        <tr class="spacer"></tr>
         <tr id="areaSlingshot">
-          <td onclick="build('slingshot')">Build Slingshot</td>
+          <td id="slingshotButton" onclick="build('slingshot')" class="button greyed-out">Build Slingshot</td>
           <td >Slingshots:</td>
-          <td id="amntSlingshot" class="amnt">0</td>
-          <td id="descSlingshot" class="desc">10 ambition;  +1 ambition/10 seconds</td>
-        </tr>
+          <td id="amntslingshot" class="amnt">0</td>
+          <td class="desc">10 ambition;  +1 ambition/10 seconds</td>
+        </tr><tr class="spacer"></tr>
         <tr id="areaBottleRocket">
-          <td onclick="build('bottlerocket')">Bottle Rocket</td>
+          <td id="bottlerocketButton" onclick="build('bottlerocket')" class="button greyed-out">Bottle Rocket</td>
           <td >Bottle Rockets:</td>
-          <td id="amntSlingshot" class="amnt">0</td>
-          <td id="descSlingshot" class="desc">5 dolans;  +1 experience/5 seconds</td>
-        </tr>
+          <td id="amntbottlerocket" class="amnt">0</td>
+          <td class="desc">5 dolans;  +1 experience/5 seconds</td>
+        </tr><tr class="spacer"></tr>
       </table>
 
       <table id="jobs" class="gameTab" style="display:none;">
+        <tr class="spacer"></tr>
         <tr id="areaBottleRocket">
-          <td onclick="job('mcdoodles')">Work at McDoodles</td>
+          <td id="mcdoodlesButton" onclick="getJob('mcdoodles')" class="button greyed-out">Work at McDoodles</td>
           <td >McDoodles:</td>
-          <td id="amntSlingshot" class="amnt">1 dolan/second</td>
-          <td id="descSlingshot" class="desc">15 experience</td>
+          <td class="amnt">+1 dolans/click</td>
+          <td class="desc">15 experience</td>
+        </tr><tr class="spacer"></tr>
+      </table>
+
+      <table id="upgrades" class="gameTab" style="display:none;">
+        <tr class="spacer"></tr>
+        <tr id="areaAlgebra">
+          <td id="algebraButton" onclick="getUpgrade('algebra')" class="button greyed-out">Learn Algebra</td>
+          <td class="amnt">Rockets gain x2 dolans, experience</td>
+          <td class="desc">1000 experience</td>
+        </tr><tr class="spacer"></tr>
+        <tr id="learnedUpgrades">
+          <tr><h4>Upgrades gotten</h4></tr>
         </tr>
       </table>
 

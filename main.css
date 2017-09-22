@@ -1,3 +1,12 @@
+body {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Safari */
+   -khtml-user-select: none;   /* Konqueror HTML */
+     -moz-user-select: none;   /* Firefox */
+      -ms-user-select: none;   /* Internet Explorer/Edge */
+          user-select: none;   /* Chrome/Future-proofing */
+}
+
 h1 {
   text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 0 5px #000, 0 0 5px #000, 0 0 5px #000, 0 0 5px #000;
   font-family: 'Roboto Slab', sans-serif;
@@ -16,18 +25,90 @@ td {
   color: white;
 }
 
+td.spacer {
+  width: 25px;
+}
+
+tr {
+}
+
+tr.spacer {
+  height: 5px !important;
+}
+
 .center {
   text-align: center;
 }
 
+.button {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Safari */
+   -khtml-user-select: none;   /* Konqueror HTML */
+     -moz-user-select: none;   /* Firefox */
+      -ms-user-select: none;   /* Internet Explorer/Edge */
+          user-select: none;   /* Chrome/Future-proofing */
+  text-align: center !important;
+  border: 2px solid black;
+  background-color: #ccc;
+  font-weight: bold;
+  width: 200px;
+  height: 29px;
+}
+
+.button.greyed-out {
+  text-shadow: 2px 0 0 #444, -2px 0 0 #444, 0 2px 0 #444, 0 -2px 0 #444, 1px 1px #444, -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444;
+  background-color: #777;
+  color: #aaa;
+}
+
+.button.greyed-out-perm {
+  text-shadow: 2px 0 0 #444, -2px 0 0 #444, 0 2px 0 #444, 0 -2px 0 #444, 1px 1px #444, -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444;
+  background-color: #777;
+  color: #aaa;
+}
+
 .desc {
+  padding-left: 7px !important;
   font-style: italic;
   color: #666;
-  padding-left: 7px !important;
 }
 
 .amnt {
   text-align: right !important;
+}
+
+#info {
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 20px;
+  color: white;
+}
+
+#info tr td {
+  text-align: left;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#info tr td.cashCount {
+  text-align: right;
+}
+
+#extracurrency {
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 20px;
+  color: white;
+}
+
+#extracurrency tr td {
+  text-align: left;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#extracurrency tr td.cashCount {
+  text-align: right;
 }
 
 #game-left {
@@ -75,6 +156,12 @@ td {
 }
 
 #tabs tr td {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Safari */
+   -khtml-user-select: none;   /* Konqueror HTML */
+     -moz-user-select: none;   /* Firefox */
+      -ms-user-select: none;   /* Internet Explorer/Edge */
+          user-select: none;   /* Chrome/Future-proofing */
   font-family: 'Roboto Slab', sans-serif;
   border: 3px solid black;
   background-color: #888;
@@ -91,7 +178,8 @@ td {
   color: white;
 }
 
-#rockets {
+#rockets tr {
+
 }
 
 #rockets tr td {
@@ -117,17 +205,10 @@ td {
   text-align: left;
   padding-left: 7px;
   padding-right: 7px;
+  height: 35px;
 }
 
 #jobs tr:first-child {
   border: 2px solid black;
   text-align: center;
-}
-
-#jobs tr td:first-child {
-  border: 2px solid black;
-  text-align: center;
-  font-weight: bold;
-  width: 200px;
-  height: 35px;
 }
