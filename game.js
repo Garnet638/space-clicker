@@ -1,5 +1,5 @@
 //Enable debug mode?
-var debug = true;
+var debug = false;
 
 //Times per second the game updates
 var gameSpeed = 1;

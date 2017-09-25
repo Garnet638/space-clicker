@@ -1,3 +1,7 @@
+# Version 0.8.1a
+## 11:19PM 09/24/2017
+Forgot to turn off debug mode, saving works now
+
 # Version 0.8.0a
 ## 11:17PM 09/24/2017
 Fixed stuff
