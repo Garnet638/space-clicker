@@ -1,3 +1,15 @@
+# Version 0.8.0a
+## 11:17PM 09/24/2017
+Fixed stuff
+
+Buildings
+
+Changed stuff
+
+Saving Loading
+
+I dont want to do changelogs anymore
+
 # Version 0.7.0a
 ## 04:52PM, 09/23/2017
 Revised version numbering
@@ -10,7 +22,7 @@ Added 3 new upgrades
 
 Upgrades now fully functioning
 
-Rocket tiers now fully functioning
+Rocket tiers now fully function
 
 #### NOTE:
 Saving/Loading is not fully implemented yet, but the code still exists for it.

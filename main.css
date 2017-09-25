@@ -5,6 +5,12 @@ body {
      -moz-user-select: none;   /* Firefox */
       -ms-user-select: none;   /* Internet Explorer/Edge */
           user-select: none;   /* Chrome/Future-proofing */
+
+  background: url(bkg.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 h1 {
@@ -19,11 +25,6 @@ h4 {
   font-family: 'Roboto Slab', sans-serif;
   font-size: 30px;
   color: white;
-}
-
-body {
-  background-image: url("bkg.jpg");
-  background-size: cover;
 }
 
 td {
@@ -46,6 +47,11 @@ tr.spacer {
 .multiplier {
   font-size: 15px;
   color: #0c0;
+}
+
+.max {
+  font-size: 15px;
+  color: #fff;
 }
 
 .center {
@@ -110,7 +116,40 @@ tr.spacer {
   text-align: right !important;
 }
 
-#upgradesBought{
+#saveLoadGUI {
+  background-color: #ddd;
+  position: absolute;
+  padding: 10px;
+  height: 215px;
+  width: 650px;
+  right: 10px;
+  top: 10px;
+}
+
+.saveLoadButton {
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-family: 'Roboto Slab', sans-serif;
+  text-decoration: none;
+  font-size: 20px;
+  color: #0bb;
+  position: absolute;
+}
+
+.saveLoadButton:hover {
+  color: #0ff;
+}
+
+.warning {
+  color:#d21;
+}
+
+#saveLoadTextarea {
+  height: 170px;
+  width: 640px;
+  resize: none;
+}
+
+#upgradesBought {
   text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
@@ -152,20 +191,16 @@ tr.spacer {
 }
 
 #game-left {
-  left: 100px;
+  position: absolute;
+  left: 10px;
 }
 
 #game-right {
-  right: 100px;
+  position: absolute;
+  right: 10px;
 }
 
 #credits {
-  /*font-family: 'Roboto Slab', sans-serif;
-  border: 2px solid black;
-  background-color: #fff;
-  color: black;
-  width: 250px;
-  height: 60px;*/
   position: absolute;
   text-align: right;
   bottom: 10px;

@@ -1,67 +1,225 @@
+//Enable debug mode?
+var debug = true;
+
+//Times per second the game updates
+var gameSpeed = 1;
+
+// ==PROPER NAME==
+var properName = {
+  "dolans" : "Dolans",
+  "ambition" : "Ambition",
+  "experience" : "Experience",
+  "oil" : "Oil",
+  "dna" : "DNA Fragments"
+}
+
 // ==CURRENCY==
-// 0 | Amount
-// 1 | Amount/Click
-// 2 | Multiplier
-// 3 | Cap
 var currency = {
-  "dolans" : [0,1,1,1000],
-  "ambition" : [0,1,1,1000],
-  "experience" : [0,0,1,1000]
+  "dolans" : {
+    "amount" : 0,
+    "apc" : 1,
+    "mult" : 1,
+    "max" : 1000
+  },
+  "ambition" : {
+    "amount" : 0,
+    "apc" : 1,
+    "mult" : 1,
+    "max" : 1000
+  },
+  "experience" : {
+    "amount" : 0,
+    "apc" : 0,
+    "mult" : 1,
+    "max" : 1000
+  }
 }
 
 // ==ROCKETS==
-// 0 | Amount
-// 1 | Cost (Dolans)
-// 2 | Cost (Ambition)
-// 3 | Cost (Experience)
-// 4 | Dolans/Second
-// 5 | Ambition/Second
-// 6 | Experience/Second
-// 7 | Rocket Level Needed
-//   |   Rocket level can be increased via upgrades
 var rockets = {
-  "slingshot" : [0,0,10,0,0,0.1,0,"Slingshot", 0],
-  "bottlerocket" : [0,25,0,0,0,0,0.2,"Bottle Rocket", 0],
-  "pvcrocket" : [0,100,25,25,1,0,1,"PVC Pipe Rocket", 0],
-  "compressedair" : [0,500,100,50,2,3,3,"Compressed Air Rocket", 1],
-  "rocketsim1" : [0,1500,125,150,0,10,10,"Rocket Simulator v1", 1]
+  "slingshot" : {
+    "name" : "Slingshot",
+    "amount" : 0,
+    "tier" : 0,
+    "cost" : {
+      "ambition" : 10
+    },
+    "aps" : {
+      "ambition" : 0.1
+    }
+  },
+  "bottlerocket" : {
+    "name" : "Bottle Rocket",
+    "amount" : 0,
+    "tier" : 0,
+    "cost" : {
+      "dolans" : 25
+    },
+    "aps" : {
+      "experience" : 0.1
+    }
+  },
+  "pvcrocket" : {
+    "name" : "PVC Rocket",
+    "amount" : 0,
+    "tier" : 0,
+    "cost" : {
+      "dolans" : 100,
+      "ambition" : 25,
+      "experience" : 25
+    },
+    "aps" : {
+      "dolans" : 1,
+      "experience" : 1
+    }
+  },
+  "compressedair" : {
+    "name" : "Compressed Air Rocket",
+    "amount" : 0,
+    "tier" : 1,
+    "cost" : {
+      "dolans" : 500,
+      "ambition" : 100,
+      "experience" : 50
+    },
+    "aps" : {
+      "dolans" : 2,
+      "ambition" : 3,
+      "experience" : 3
+    }
+  },
+  "rocketsim1" : {
+    "name" : "Rocket Simulator 1999",
+    "amount" : 0,
+    "tier" : 1,
+    "cost" : {
+      "dolans" : 1500,
+      "ambition" : 125,
+      "experience" : 150
+    },
+    "aps" : {
+      "dolans" : 0,
+      "ambition" : 10,
+      "experience" : 10
+    }
+  },
 }
 
 // ==JOBS==
-// 0 | Amount
-// 1 | Active or Idle job (Active: 0, Idle: 1)
-//   |   If it's an active job, it adds to the CPS of a certian thing
-//   |   If it's an idle job, you get money just by sitting around.
-// 2 | Cost (Dolans)
-// 3 | Cost (Ambition)
-// 4 | Cost (Experience)
-// 5 | Dolans/Click
-// 6 | Ambition/Click
-// 7 | Experience/Click
-// 8 | Job Rank needed
 var jobs = {
-  "mcdoodles" : [0,0,0,0,15,1,0,0,"McDoodles", 0],
-  "stroopbucks" : [0,0,0,25,100,2,0,0,"StroopBucks", 0]
+  "mcdoodles" : {
+    "name" : "McDoodles",
+    "working" : false,
+    "active" : true,
+    "cost" : {
+      "experience" : 25
+    },
+    "apc" : {
+      "dolans" : 1
+    }
+  },
+  "stroopbucks" : {
+    "name" : "StoopBucks",
+    "working" : false,
+    "active" : true,
+    "cost" : {
+      "experience" : 100,
+      "ambition" : 500
+    },
+    "apc" : {
+      "dolans" : 2
+    }
+  }
 }
 
 // ==UPGRADES==
-// 0 | One-time or Multiple-time (One time: 0, Multiple: 1)
-//   |   One-time upgrades can be activated only once before dissapearing
-//   |   Multiple-time upgrades can be activated as many times as you'd like
-// 1 | Amount bought
-// 2 | Pre-Requisites
-// 3 | Function to call when bought
-// 4 | Name
-// 5 | Description
-// 6 | Cost (Dolans)
-// 7 | Cost (Ambition)
-// 8 | Cost (Experience)
 var upgrades = {
-  "algebra" : [0, 0, [], function(){currency["dolans"][2] += .125; currency["experience"][2] += .125;}, "Learn Algebra", "+ x1.125 multiplier to Dolans and Experience", 0, 0, 1000],
-  "geometry" : [0, 0, ["algebra"], function(){currency["dolans"][2] += .125; currency["experience"][2] += .125;}, "Learn Geometry", "+ x1.125 multiplier to Dolans and Experience", 1000, 0, 5000],
-  "newBed" : [0, 0, ["algebra"], function(){currency["ambition"][2] += .25;}, "A new bed", "x1.25 multiplier to ambition", 1000, 0, 0],
-  "moreRockets" : [0, 0, ["algebra"], function(){upgradeLevels['rocket']=1;for(rocket in rockets){writeRocketHTML(rocket);}}, "Better Rockets", "Learn how to build more rockets", 1000, 0, 0],
+  "algebra" : {
+    "onetime" : 0,
+    "amount" : 0,
+    "prerequisites" : [],
+    "function" : function(){currency['dolans']['mult'] += .125; currency['experience']['mult'] += .125;},
+    "name" : "Learn Algebra",
+    "description" : "+ x1.125 multiplier to Dolans and Experience",
+    "cost" : {
+      "dolans" : 0,
+      "ambition" : 0,
+      "experience" : 1000
+    }
+  },
+  "geometry" : {
+    "onetime" : 0,
+    "amount" : 0,
+    "prerequisites" : ["algebra"],
+    "function" : function(){currency['dolans']['mult'] += .125; currency['experience']['mult'] += .125;},
+    "name" : "Learn Geometry",
+    "description" : "+ x1.125 multiplier to Dolans and Experience",
+    "cost" : {
+      "dolans" : 500,
+      "ambition" : 0,
+      "experience" : 1000
+    }
+  },
+  "newBed" : {
+    "onetime" : 0,
+    "amount" : 0,
+    "prerequisites" : ["algebra"],
+    "function" : function(){currency['ambition']['mult'] += .25;},
+    "name" : "A new bed",
+    "description" : "+ x1.25 multiplier to Ambition",
+    "cost" : {
+      "dolans" : 1000,
+      "ambition" : 0,
+      "experience" : 0
+    }
+  },
+  "moreRockets" : {
+    "onetime" : 0,
+    "amount" : 0,
+    "prerequisites" : ["geometry"],
+    "function" : function(){upgradeLevels['rocket']=1;for(rocket in rockets){writeRocketHTML(rocket);}},
+    "name" : "Better Rockets",
+    "description" : "+ x1.25 multiplier to Ambition",
+    "cost" : {
+      "dolans" : 1500,
+      "ambition" : 500,
+      "experience" : 1500
+    }
+  },
+}
 
+// ==BUILDINGS==
+var buildings = {
+  "piggybank" : {
+    "name" : "Piggy Bank",
+    "description" : "Increase max Dolans by 1000",
+    "amount" : 0,
+    "tier" : 0,
+    "function" : function(){ currency['dolans']['max']+=1000; },
+    "cost" : {
+      "dolans" : 500
+    }
+  },
+  "capacityForGreatness" : {
+    "name" : "Capacity for greatness",
+    "description" : "Increase max Ambition by 1000",
+    "amount" : 0,
+    "tier" : 0,
+    "function" : function(){ currency['ambition']['max']+=1000; },
+    "cost" : {
+      "dolans" : 500
+    }
+  },
+  "notebook" : {
+    "name" : "A pen and notebook",
+    "description" : "Increase max Experience by 1000",
+    "amount" : 0,
+    "tier" : 0,
+    "function" : function(){ currency['experience']['max']+=1000; },
+    "cost" : {
+      "dolans" : 500
+    }
+  }
 }
 
 //The upgrades you currently have
@@ -69,13 +227,25 @@ var upgradesHave = [];
 
 //Upgrade levels
 var upgradeLevels = {
-  "rocket" : 0
+  "rocket" : 0,
+  "building" : 0
+}
+
+//Defaults
+var defaults = {
+  "currency" : currency,
+  "rockets" : rockets,
+  "jobs" : jobs,
+  "upgrades" : upgrades,
+  "upgradesHave" : upgradesHave,
+  "upgradeLevels" : upgradeLevels,
+  "buildings" : buildings
 }
 
 //Create and save cookies
 function bake_cookie(name, value){
 	var exdate=new Date();
-	exdate.setDate(exdate.getDate() + 30);
+	exdate.setDate(exdate.getDate() + 365);
 	var cookie = [name, '=', JSON.stringify(value),'; expires=.', exdate.toUTCString(), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
 	document.cookie = cookie;
 }
@@ -87,51 +257,140 @@ function eat_cookie(name){
 	return result;
 }
 
+//Make save data
+function makeSaveData(){
+  //Create the empty save data
+  var saveData = {
+    'rockets' : {},
+    'upgrades' : {},
+    'buildings' : {},
+    'jobs' : {},
+    'currency' : {},
+    'upgradesHave' : {},
+    'upgradeLevels' : {}
+  };
+  //Iterate through each and only save the amount you have
+  for (rocket in rockets){ saveData['rockets'][rocket] = {}; saveData['rockets'][rocket]['amount'] = rockets[rocket]['amount']; }
+  for (upgrade in upgrades){ saveData['upgrades'][upgrade] = {}; saveData['upgrades'][upgrade]['amount'] = upgrades[upgrade]['amount']; }
+  for (building in buildings){ saveData['buildings'][building] = {}; saveData['buildings'][building]['amount'] = buildings[building]['amount']; }
+  //Save all data, since all fields can be changed
+  saveData['jobs'] = jobs;
+  saveData['currency'] = currency;
+  saveData['upgradesHave'] = upgradesHave;
+  saveData['upgradeLevels'] = upgradeLevels;
+  return saveData;
+}
+
 //Save
 function save(type){
-  var saveData = {
-    "currency" : currency,
-    "rockets" : rockets,
-    "jobs" : jobs,
-    "upgrades" : upgrades,
-    "upgradesHave" : upgradesHave,
-    "upgradeLevels" : upgradeLevels
-  }
-  var saveData64 = btoa(JSON.stringify(saveData));
-  console.log(saveData64);
+  var saveData = makeSaveData();
+  var saveData64 = LZString.compressToBase64(JSON.stringify(saveData));
   if (type == "manual" || type == "auto"){
-    bake_cookie('saveData', saveData64);
+    bake_cookie('saveData', JSON.stringify(saveData64));
   }
   else if (type == "export"){
-    $('#saveLoadGUI').sideDown(500);
     $('#saveLoadTextarea').val(saveData64);
   }
+}
+
+//Load
+function load(type){
+  //Set the save data to empty so no *major* errors occur
+  var saveData = [];
+  //Manual loading from import
+  if (type == "manual"){
+    try{
+      saveData = JSON.parse(LZString.decompressFromBase64($('#saveLoadTextarea').val()));
+    }
+    catch(e){
+      alert('Invalid save data entered');
+    }
+  }
+  //Auto loading when page is vitited
+  if (type == 'auto'){
+    try{
+      saveData = JSON.parse(LZString.decompressFromBase64(eat_cookie('saveData')));
+    }
+    catch(e) {
+      console.log('Couldn\'t autoload')
+    }
+  }
+  try{
+    for (rocket in rockets){ rockets[rocket]['amount'] = saveData['rockets'][rocket]['amount']; }
+    for (upgrade in upgrades){ upgrades[upgrade]['amount'] = saveData['upgrades'][upgrade]['amount']; }
+    for (building in buildings){ buildings[building]['amount'] = saveData['buildings'][building]['amount']; }
+    jobs = saveData['jobs'];
+    currency = saveData['currency'];
+    upgradesHave = saveData['upgradesHave'];
+    upgradeLevels = saveData['upgradeLevels'];
+  }
+  catch (e) {
+    console.log('An error occured while loading. Maybe there was no save file?')
+  }
+}
+
+//Reset
+function reset(){
+  var confirmed = window.confirm('Are you sure? This will wipe ALL progress');
+  if (confirmed){
+    currency = defaults["currency"];
+    rockets = defaults["rockets"];
+    jobs = defaults["jobs"];
+    upgrades = defaults["upgrades"];
+    upgradesHave = defaults["upgradesHave"];
+    upgradeLevels = defaults["upgradeLevels"];
+    buildings = defaults["buildings"];
+  }
+}
+
+//Creates HTML for buildings
+function createBuilding(building){
+  if (buildings[building]['tier'] <= upgradeLevels['building'] && !$('#area'+building).length){
+    var buildingText = "";
+    buildingText += '<tr class="spacer"></tr><tr id="area' + building + '"><td id="' + building + 'Button" onclick="buildBuild(\''+building+'\')" class="button greyed-out">Build ' + buildings[building]['name'] + '</td>';
+
+    buildingText += '<td id="' + building + 'Button10" onclick="buildBuild(\''+building+'\', 10)" class="smolbutton buildingBuy10 greyed-out">x10</td>';
+    buildingText += '<td id="' + building + 'Button100" onclick="buildBuild(\''+building+'\', 100)" class="smolbutton buildingBuy100 greyed-out" style="display:none">x100</td>';
+    buildingText += '<td id="' + building + 'Button1000" onclick="buildBuild(\''+building+'\', 1000)" class="smolbutton buildingBuy1000 greyed-out" style="display:none">x1000</td>';
+
+    buildingText += '<td >' + buildings[building]['name'] + 's:</td><td id="amnt' + building + '" class="amnt">' + buildings[building]['amount'] + '</td><td class="desc">';
+    buildingText += buildings[building]['description'] + '<br />';
+    for (i in buildings[building]['cost']){
+      if (buildings[building]['cost'][i]>0){ buildingText += buildings[building]['cost'][i] + ' ' + properName[i] + '; '; }
+    }
+    buildingText += '</td></tr>';
+    return buildingText;
+  }
+}
+
+//Writes HTML for buildings
+function writeBuildingHTML(building){
+  var rock = createBuilding(building);
+  if (rock != null){ $('#buildingTable > tr:last').after(rock); }
 }
 
 //Creates the HTML for upgrades
 function createUpgrade(upgrade){
   var neededUpgrades = 0; //Amount of pre-requisites you have
-  for (i = 0; i < upgrades[upgrade][2].length; i++){
-    if (upgradesHave.indexOf(upgrades[upgrade][2][i]) > -1){
+  for (i = 0; i < upgrades[upgrade]['prerequisites'].length; i++){
+    if (upgradesHave.indexOf(upgrades[upgrade]['prerequisites'][i]) > -1){
       neededUpgrades++;
     }
   }
-
   //If you have the needed amount of pre-requisites
-  if (neededUpgrades >= upgrades[upgrade][2].length && !$('#area'+upgrade).length){
-
+  if (neededUpgrades >= upgrades[upgrade]['prerequisites'].length && !$('#area'+upgrade).length){
     //Check if its a one time upgrade that's not been bought
-    if ((upgrades[upgrade][0] == 0 && upgrades[upgrade][1] == 0) || upgrades[upgrade][0] == 1){
+    if ((upgrades[upgrade]['onetime'] == 0 && upgrades[upgrade]['amount'] == 0) || upgrades[upgrade]['onetime'] == 1){
       var upgradeText = "";
-      upgradeText += '<tr class="spacer"></tr><tr id="area' + upgrade + '"><td id="' + upgrade + 'Button" onclick="getUpgrade(\''+upgrade+'\')" class="button greyed-out">' + upgrades[upgrade][4] + '</td><td>' + upgrades[upgrade][4];
-      if (upgrades[upgrade][0] == 1){
-        upgradeText += ': </td><td class="amnt" id="amnt' + upgrade + '">' + upgrades[upgrade][1] + '</td>"';
+      upgradeText += '<tr id="spacer' + upgrade + '" class="spacer"></tr><tr id="area' + upgrade + '"><td id="' + upgrade + 'Button" onclick="getUpgrade(\''+upgrade+'\')" class="button greyed-out">' + upgrades[upgrade]['name'] + '</td><td>' + upgrades[upgrade]['name'];
+      if (upgrades[upgrade]['onetime'] == 1){
+        upgradeText += ': </td><td class="amnt" id="amnt' + upgrade + '">' + upgrades[upgrade]['amount'] + '</td>"';
       }
       else { upgradeText += '</td><td></td>"'; }
-      upgradeText += '<td>' + upgrades[upgrade][5] + '</td><td class="desc">';
-      if (upgrades[upgrade][6]>0){ upgradeText += upgrades[upgrade][6] + ' dolans   '; }
-      if (upgrades[upgrade][7]>0){ upgradeText += upgrades[upgrade][7] + ' ambition   '; }
-      if (upgrades[upgrade][8]>0){ upgradeText += upgrades[upgrade][8] + ' experience   '; }
+      upgradeText += '<td>' + upgrades[upgrade]['description'] + '</td><td class="desc">';
+      if (upgrades[upgrade]['cost']['dolans']>0){ upgradeText += upgrades[upgrade]['cost']['dolans'] + ' dolans   '; }
+      if (upgrades[upgrade]['cost']['ambition']>0){ upgradeText += upgrades[upgrade]['cost']['ambition'] + ' ambition   '; }
+      if (upgrades[upgrade]['cost']['experience']>0){ upgradeText += upgrades[upgrade]['cost']['experience'] + ' experience   '; }
       upgradeText += '</td></tr>';
       return upgradeText;
     }
@@ -146,23 +405,24 @@ function writeUpgradeHTML(upgrade){
 
 //Creates the HTML for rockets
 function createRocket(rocket){
-  if (rockets[rocket][8] <= upgradeLevels['rocket'] && !$('#area'+rocket).length){
+  if (rockets[rocket]['tier'] <= upgradeLevels['rocket'] && !$('#area'+rocket).length){
     var rocketText = "";
-    rocketText += '<tr class="spacer"></tr><tr id="area' + rocket + '"><td id="' + rocket + 'Button" onclick="build(\''+rocket+'\')" class="button greyed-out">Build ' + rockets[rocket][7] + '</td>';
+    rocketText += '<tr class="spacer"></tr><tr id="area' + rocket + '"><td id="' + rocket + 'Button" onclick="build(\''+rocket+'\')" class="button greyed-out">Build ' + rockets[rocket]['name'] + '</td>';
 
     rocketText += '<td id="' + rocket + 'Button10" onclick="build(\''+rocket+'\', 10)" class="smolbutton rocketBuy10 greyed-out">x10</td>';
     rocketText += '<td id="' + rocket + 'Button100" onclick="build(\''+rocket+'\', 100)" class="smolbutton rocketBuy100 greyed-out" style="display:none">x100</td>';
     rocketText += '<td id="' + rocket + 'Button1000" onclick="build(\''+rocket+'\', 1000)" class="smolbutton rocketBuy1000 greyed-out" style="display:none">x1000</td>';
 
-    rocketText += '<td >' + rockets[rocket][7] + 's:</td><td id="amnt' + rocket + '" class="amnt">' + rockets[rocket][0] + '</td><td class="desc">';
-    if (rockets[rocket][1]>0){ rocketText += rockets[rocket][1] + ' dolans; '; }
-
-    if (rockets[rocket][2]>0){ rocketText += rockets[rocket][2] + ' ambition; '; }
-    if (rockets[rocket][3]>0){ rocketText += rockets[rocket][3] + ' experience; '; }
+    rocketText += '<td >' + rockets[rocket]['name'] + 's:</td><td id="amnt' + rocket + '" class="amnt">' + rockets[rocket]['amount'] + '</td><td class="desc">';
+    for (dolan in currency){
+      if (rockets[rocket]['cost'][dolan] != null){
+        if (rockets[rocket]['cost'][dolan]>0){ rocketText += rockets[rocket]['cost'][dolan] + ' ' + properName[dolan] + '; '; }
+      }
+    }
     rocketText += '<br />';
-    if (rockets[rocket][4]>0){ rocketText += rockets[rocket][4] + ' dolans/second; '; }
-    if (rockets[rocket][5]>0){ rocketText += rockets[rocket][5] + ' ambition/second; '; }
-    if (rockets[rocket][6]>0){ rocketText += rockets[rocket][6] + ' experience/second; '; }
+    for (dolan in currency){
+      if (rockets[rocket]['aps'][dolan] != null && rockets[rocket]['aps'][dolan]>0){ rocketText += rockets[rocket]['aps'][dolan] + ' ' + properName[dolan] + '/second; '; }
+    }
     rocketText += '</td></tr>';
     return rocketText;
   }
@@ -172,15 +432,17 @@ function createRocket(rocket){
 function writeRocketHTML(rocket){
   var rock = createRocket(rocket);
   if (rock != null){ $('#rocketsTable > tr:last').after(rock); }
-  else { console.log('Rocket returned null: ' + rocket); }
 }
 
 //Checks if you can buy a rocket
 function checkIfCanBuy(rocket, amount=1){
-  if ((rockets[rocket][1] * amount) <= currency["dolans"][0] &&
-      (rockets[rocket][2] * amount) <= currency["ambition"][0] &&
-      (rockets[rocket][3] * amount) <= currency["experience"][0]
-  ){
+  var check = 0;
+  for (i in rockets[rocket]['cost']){
+    if ((rockets[rocket]['cost'][i] * amount) <= currency[i]['amount']){
+      check++;
+    }
+  }
+  if (check == Object.keys(rockets[rocket]['cost']).length){
     return true;
   }
   else {
@@ -190,10 +452,13 @@ function checkIfCanBuy(rocket, amount=1){
 
 //Checks if you can work a job
 function checkIfCanWork(job){
-  if (jobs[job][2] <= currency["dolans"][0] &&
-      jobs[job][3] <= currency["ambition"][0] &&
-      jobs[job][4] <= currency["experience"][0]
-  ){
+  var check = 0;
+  for (i in jobs[job]['cost']){
+    if (jobs[job]['cost'][i] <= currency[i]['amount']){
+      check++;
+    }
+  }
+  if (check == Object.keys(jobs[job]['cost']).length && jobs[job]['working'] == false){
     return true;
   }
   else {
@@ -203,18 +468,20 @@ function checkIfCanWork(job){
 
 //Check if you can buy an upgrade
 function checkIfCanUpgrade(upgrade, bypassMoney = false){
-  if ((upgrades[upgrade][6] <= currency["dolans"][0] &&
-      upgrades[upgrade][7] <= currency["ambition"][0] &&
-      upgrades[upgrade][8] <= currency["experience"][0]) ||
-      bypassMoney == true
-  ){
+  var check = 0;
+  for (i in upgrades[upgrade]['cost']){
+    if (upgrades[upgrade]['cost'][i] <= currency[i]['amount']){
+      check++;
+    }
+  }
+  if ((check == Object.keys(upgrades[upgrade]['cost']).length || bypassMoney == true) && ((upgrades[upgrade]['onetime'] == 0 && upgrades[upgrade]['amount'] == 0) || upgrades[upgrade]['onetime'] == 1)){
     var neededUpgrades = 0;
-    for (i = 0; i < upgrades[upgrade][2].length; i++){
-      if (upgradesHave.indexOf(upgrades[upgrade][2][i]) > -1){
+    for (i = 0; i < upgrades[upgrade]['prerequisites'].length; i++){
+      if (upgradesHave.indexOf(upgrades[upgrade]['prerequisites'][i]) > -1){
         neededUpgrades++;
       }
     }
-    if (neededUpgrades >= upgrades[upgrade][2].length){
+    if (neededUpgrades >= upgrades[upgrade]['prerequisites'].length){
       return true;
     }
   }
@@ -223,11 +490,30 @@ function checkIfCanUpgrade(upgrade, bypassMoney = false){
   }
 }
 
+//Check if you can build a building
+function checkIfCanBuild(building, amount=1){
+  var check = 0;
+  for (i in buildings[building]['cost']){
+    if ((buildings[building]['cost'][i] * amount) <= currency[i]['amount']){
+      check++;
+    }
+  }
+  if (check == Object.keys(buildings[building]['cost']).length){
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 //Updates GUI
 function updateInfo(){
-  $("#ambitionCount").text(Math.floor(currency["ambition"][0]));
-  $("#dolansCount").text(Math.floor(currency["dolans"][0]));
-  $("#experienceCount").text(Math.floor(currency["experience"][0]));
+  $("#ambitionCount").text(Math.floor(currency['ambition']['amount']));
+  $("#ambitionMax").text("(Max "+ Math.floor(currency['ambition']['max']) + ")");
+  $("#dolansCount").text(Math.floor(currency['dolans']['amount']));
+  $("#dolansMax").text("(Max "+ Math.floor(currency['dolans']['max']) + ")");
+  $("#experienceCount").text(Math.floor(currency['experience']['amount']));
+  $("#experienceMax").text("(Max "+ Math.floor(currency['experience']['max']) + ")");
 }
 
 //Changes tab
@@ -241,13 +527,27 @@ function tab(tabName){
 //Adds a rocket to inventory
 function build(rocket, amount=1){
   if (checkIfCanBuy(rocket, amount)){
-    rockets[rocket][0] += amount;
-    currency["dolans"][0] -= rockets[rocket][1] * amount;
-    currency["ambition"][0] -= rockets[rocket][2] * amount;
-    currency["experience"][0] -= rockets[rocket][3] * amount;
-    $("#amnt"+rocket).text(rockets[rocket][0]);
+    rockets[rocket]['amount'] += amount;
+    for (dolan in rockets[rocket]['cost']){
+      currency[dolan]['amount'] -= rockets[rocket]['cost'][dolan] * amount;
+    }
+    $("#amnt"+rocket).text(rockets[rocket]['amount']);
     updateInfo();
     greyOutRocket(rocket);
+  }
+}
+
+//Adds a building to inventory
+function buildBuild(building, amount=1){
+  if (checkIfCanBuild(building, amount)){
+    buildings[building]['amount'] += amount;
+    for (dolan in buildings[building]['cost']){
+      currency[dolan]['amount'] -= buildings[building]['cost'][dolan] * amount;
+    }
+    $("#amnt"+building).text(buildings[building]['amount']);
+    buildings[building]['function']();
+    updateInfo();
+    greyOutBuilding(building);
   }
 }
 
@@ -263,43 +563,55 @@ function greyOutRocket(rocket){
   else { $('#'+rocket+"Button1000").addClass('greyed-out'); }
 }
 
+//Greys out building
+function greyOutBuilding(building){
+  if (checkIfCanBuild(building)){$('#'+building+"Button").removeClass('greyed-out');}
+  else { $('#'+building+"Button").addClass('greyed-out'); }
+  if (checkIfCanBuild(building, 10)){$('#'+building+"Button10").removeClass('greyed-out');}
+  else { $('#'+building+"Button10").addClass('greyed-out'); }
+  if (checkIfCanBuild(building, 100)){$('#'+building+"Button100").removeClass('greyed-out');}
+  else { $('#'+building+"Button100").addClass('greyed-out'); }
+  if (checkIfCanBuild(building, 1000)){$('#'+building+"Button1000").removeClass('greyed-out');}
+  else { $('#'+building+"Button1000").addClass('greyed-out'); }
+}
+
 //Adds currency when you click the buttons
 function work(type){
-  currency[type][0] += currency[type][1] * currency[type][2];
-  $("#"+type+"Count").text(Math.floor(currency[type][0]));
+  currency[type]['amount'] += currency[type]['apc'] * currency[type]['mult'];
+  $("#"+type+"Count").text(Math.floor(currency[type]['amount']));
 }
 
 //Work a job
 function getJob(job){
-  if (checkIfCanWork(job) && jobs[job][0] == 0){
+  if (checkIfCanWork(job) && jobs[job]['working'] == false){
     $("#"+job+"Button").removeClass('greyed-out');
     $("#"+job+"Button").addClass('greyed-out-perm');
     $("#"+job+"Button").text("You already work here");
-    jobs[job][0] = 1;
-    currency["dolans"][1] += jobs[job][5];
-    currency["ambition"][1] += jobs[job][6];
-    currency["experience"][1] += jobs[job][7];
+    jobs[job]['working'] = true;
+    for (dolan in jobs[job]['apc']){
+      currency[dolan]['apc'] += jobs[job]['apc'][dolan];
+    }
   }
 }
 
 //Add an upgrade to your inventory
 function getUpgrade(upgrade){
   if (checkIfCanUpgrade(upgrade)){
-    if (upgrades[upgrade][0] == 1){
-      $('#amnt' + upgrade).text(upgrades[upgrade][1]);
+    if (upgrades[upgrade]['onetime'] == 1){
+      $('#amnt' + upgrade).text(upgrades[upgrade]['amount']);
     }
     else{
       upgradesHave.push(upgrade);
       addUpgradesToTable();
       $('#area' + upgrade).remove();
       $('#spacer' + upgrade).remove();
-      $('#upgradesBought').html($('#upgradesBought').html() + '<strong>' + upgrades[upgrade][4] + ': </strong>' + upgrades[upgrade][5]+ '<br />');
+      $('#upgradesBought').html($('#upgradesBought').html() + '<strong>' + upgrades[upgrade]['name'] + ': </strong>' + upgrades[upgrade]['description']+ '<br />');
     }
-    upgrades[upgrade][1]++;
-    currency["dolans"][0] -= upgrades[upgrade][6];
-    currency["ambition"][0] -= upgrades[upgrade][7];
-    currency["experience"][0] -= upgrades[upgrade][8];
-    upgrades[upgrade][3]();
+    upgrades[upgrade]['amount']++;
+    currency['dolans']['amount'] -= upgrades[upgrade]['cost']['dolans'];
+    currency['ambition']['amount'] -= upgrades[upgrade]['cost']['ambition'];
+    currency['experience']['amount'] -= upgrades[upgrade]['cost']['experience'];
+    upgrades[upgrade]['function']();
   }
 }
 
@@ -316,12 +628,15 @@ function addUpgradesToTable(){
 //Used for debug
 function ruinGame(){
   for (dolan in currency){
-    currency[dolan][0] = 1000000;
+    currency[dolan]['amount'] = 100000000;
   }
 }
 
 //Initialize the game
 function initGame(){
+
+  //Load game
+  if (debug == false){ load('auto'); }
 
   //Jobs
   var jobText = "";
@@ -345,6 +660,14 @@ function initGame(){
   }
   $('#rocketsTable').html(rockitboi);
 
+  //Buildings
+  var builditboi = "";
+  for (building in buildings){
+    builditboi += createBuilding(building);
+  }
+  $('#buildingTable').html(builditboi);
+
+
   //  ==Upgrades==
   //The upgrade html
   var upgradeText = "";
@@ -352,22 +675,22 @@ function initGame(){
   for (upgrade in upgrades){
     //Check if it has all the required Pre-Requisites
     var neededUpgrades = 0;
-    for (i = 0; i < upgrades[upgrade][2].length; i++){
-      if (upgradesHave.indexOf(upgrades[upgrade][2][i]) > -1){
+    for (i = 0; i < upgrades[upgrade]['prerequisites'].length; i++){
+      if (upgradesHave.indexOf(upgrades[upgrade]['prerequisites'][i]) > -1){
         neededUpgrades++;
       }
     }
     //If it does
-    if (neededUpgrades >= upgrades[upgrade][2].length){
-      upgradeText += '<tr class="spacer" id="spacer' + upgrade + '"></tr><tr id="area' + upgrade + '"><td id="' + upgrade + 'Button" onclick="getUpgrade(\''+upgrade+'\')" class="button greyed-out">' + upgrades[upgrade][4] + '</td><td>' + upgrades[upgrade][4];
-      if (upgrades[upgrade][0] == 1){
-        upgradeText += ': </td><td class="amnt" id="amnt' + upgrade + '">' + upgrades[upgrade][1] + '</td>"';
+    if (neededUpgrades >= upgrades[upgrade]['prerequisites'].length){
+      upgradeText += '<tr class="spacer" id="spacer' + upgrade + '"></tr><tr id="area' + upgrade + '"><td id="' + upgrade + 'Button" onclick="getUpgrade(\''+upgrade+'\')" class="button greyed-out">' + upgrades[upgrade]['name'] + '</td><td>' + upgrades[upgrade]['name'];
+      if (upgrades[upgrade]['onetime'] == 1){
+        upgradeText += ': </td><td class="amnt" id="amnt' + upgrade + '">' + upgrades[upgrade]['amount'] + '</td>"';
       }
       else { upgradeText += '</td><td></td>"'; }
-      upgradeText += '<td>' + upgrades[upgrade][5] + '</td><td class="desc">';
-      if (upgrades[upgrade][6]>0){ upgradeText += upgrades[upgrade][6] + ' dolans   '; }
-      if (upgrades[upgrade][7]>0){ upgradeText += upgrades[upgrade][7] + ' ambition   '; }
-      if (upgrades[upgrade][8]>0){ upgradeText += upgrades[upgrade][8] + ' experience   '; }
+      upgradeText += '<td>' + upgrades[upgrade]['description'] + '</td><td class="desc">';
+      if (upgrades[upgrade]['cost']['dolans']>0){ upgradeText += upgrades[upgrade]['cost']['dolans'] + ' dolans   '; }
+      if (upgrades[upgrade]['cost']['ambition']>0){ upgradeText += upgrades[upgrade]['cost']['ambition'] + ' ambition   '; }
+      if (upgrades[upgrade]['cost']['experience']>0){ upgradeText += upgrades[upgrade]['cost']['experience'] + ' experience   '; }
       upgradeText += '</td></tr>';
     }
   }
@@ -386,15 +709,17 @@ function updateGame(){
   //Rocket loop
   for (rocket in rockets){
     //Add currency
-    currency["dolans"][0] += rockets[rocket][0] * rockets[rocket][4] *  currency["dolans"][2];
-    currency["ambition"][0] += rockets[rocket][0] * rockets[rocket][5] *  currency["ambition"][2];
-    currency["experience"][0] += rockets[rocket][0] * rockets[rocket][6] *  currency["experience"][2];
+    for (dolan in currency){
+      if (rockets[rocket]['aps'][dolan] != null){
+        currency[dolan]['amount'] += (rockets[rocket]['amount'] * rockets[rocket]['aps'][dolan] *  currency['dolans']['mult']) * gameSpeed;
+      }
+    }
 
     //Update rocket buy buttons
     greyOutRocket(rocket);
 
-    if (rockets[rocket][0] >= 100){ $('.rocketBuy100').slideDown(0); }
-    if (rockets[rocket][0] >= 1000){ $('.rocketBuy1000').slideDown(0); }
+    if (rockets[rocket]['amount'] >= 100){ $('.rocketBuy100').slideDown(0); }
+    if (rockets[rocket]['amount'] >= 1000){ $('.rocketBuy1000').slideDown(0); }
   }
 
   //Update job buy buttons
@@ -405,6 +730,10 @@ function updateGame(){
   //Update upgrade buy buttons
   for (upgrade in upgrades){
     if (checkIfCanUpgrade(upgrade)){$('#'+upgrade+"Button").removeClass('greyed-out');}
+  }
+
+  for (building in buildings){
+    greyOutBuilding(building);
   }
 
   //Update GUI

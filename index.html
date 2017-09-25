@@ -5,17 +5,19 @@
 
     <meta charset="UTF-8">
     <meta name="description" content="Click your way to space!">
-    <meta name="keywords" content="idle game, idler game, game, free game, space, ">
+    <meta name="keywords" content="idle game, idler game, game, free game, space, clicker game, space clicker, spaceclicker">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
     <script src="jquery.js"></script>
+    <script src="lz-string.js" type="text/javascript"></script>
     <script src="game.js"></script>
     <script>
       $(function(){
         initGame();
         window.setInterval(updateGame, 1000);
+        window.setInterval(save('auto'), 60000);
       });
     </script>
   </head>
@@ -24,10 +26,11 @@
 
     <div id="credits">
       <p>
-        Version 0.7.0a<br />
+        Version 0.8.0a<br />
         Made by <a href="#" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
+        View progress on <a href="https://trello.com/b/13JK4tRf/space-clicker">Trello</a><br />
         View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a><br />
-        View on <a href="https://trello.com/b/13JK4tRf/space-clicker">Trello</a>
+        <span class="warning">This game is still in alpha. Stuff may break</span>
       </p>
     </div>
 
@@ -39,12 +42,14 @@
           <td onclick="work('ambition')" class="button">Stare at sky</td>
           <td>Ambition: </td>
           <td id="ambitionCount" class="cashCount">0</td>
+          <td id="ambitionMax" class="max"></td>
           <td id="ambitionMult" class="multiplier"></td>
         </tr>
         <tr>
           <td onclick="work('dolans')" class="button" id="jobTitle">Work</td>
           <td>Dolans: </td>
           <td id="dolansCount" class="cashCount">0</td>
+          <td id="dolansMax" class="max"></td>
           <td id="dolansMult" class="multiplier"></td>
         </tr>
       </table>
@@ -55,13 +60,19 @@
         <tr>
           <td id="experienceLabel">Experience: </td>
           <td id="experienceCount" class="cashCount">0</td>
+          <td id="experienceMax" class="max"></td>
           <td id="experienceMult" class="multiplier"></td>
           <td class="spacer"></td>
-          <td id="dnaLabel">???: </td>
-          <td id="dnaCount" class="cashCount">0</td>
+          <td id="oilLabel">???: </td>
+          <td id="oilCount" class="cashCount">0</td>
+          <td id="oilMax" class="max"></td>
+          <td id="oilMult" class="multiplier"></td>
         </tr>
         <tr>
-
+          <td id="dnaLabel">???: </td>
+          <td id="dnaCount" class="cashCount">0</td>
+          <td id="dnaMax" class="max"></td>
+          <td id="dnaMult" class="multiplier"></td>
         </tr>
       </table>
 
@@ -72,6 +83,7 @@
           <td class="selectedTab gameTabSelector" id="tabrockets" onclick="tab('rockets');"><a>Rockets</a></td>
           <td class="gameTabSelector" id="tabjobs" onclick="tab('jobs');"><a>Jobs</a></td>
           <td class="gameTabSelector" id="tabupgrades" onclick="tab('upgrades');"><a>Upgrades</a></td>
+          <td class="gameTabSelector" id="tabbuildings" onclick="tab('buildings');"><a>Buildings</a></td>
         </tr>
       </table>
 
@@ -93,6 +105,31 @@
         <p id="upgradesBought"></p>
       </div>
 
+      <div id="buildings" class="gameTab" style="display:none;">
+        <table id="buildingTable" class="upgradeTable">
+
+        </table>
+      </div>
+
     </div>
+
+    <div id="game-right">
+    </div>
+
+    <a class="saveLoadButton" onclick="reset();" style="right: 220px; top: 10px;">Reset </a>
+    <a class="saveLoadButton" onclick="save('manual');" style="right: 160px; top: 10px;">Save </a>
+    <a class="saveLoadButton" onclick="$('#saveLoadGUI').slideDown(250);" style="right: 10px; top: 10px;"> Export/Import</a>
+    <div id="saveLoadGUI" style="display:none">
+      <textarea id="saveLoadTextarea"></textarea>
+      <table>
+        <tr>
+          <td class="button" onclick="save('export');">Export</td>
+          <td class="button" onclick="load('manual')">Import</td>
+          <td class="button" onclick="$('#saveLoadTextarea').select();">Select All</td>
+          <td class="button" onclick="$('#saveLoadGUI').slideUp(250);">Close</td>
+        </tr>
+      </table>
+    </div>
+
   </body>
 </html>
