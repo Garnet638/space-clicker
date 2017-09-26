@@ -16,8 +16,6 @@
     <script>
       $(function(){
         initGame();
-        window.setInterval(updateGame, 1000);
-        window.setInterval(save('auto'), 60000);
       });
     </script>
   </head>
@@ -26,7 +24,7 @@
 
     <div id="credits">
       <p>
-        Version 0.8.1a<br />
+        Version 0.9.0a<br />
         Made by <a href="#" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
         View progress on <a href="https://trello.com/b/13JK4tRf/space-clicker">Trello</a><br />
         View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a><br />
@@ -63,12 +61,17 @@
           <td id="experienceMax" class="max"></td>
           <td id="experienceMult" class="multiplier"></td>
           <td class="spacer"></td>
-          <td id="oilLabel">???: </td>
+          <td id="oilLabel">Oil: </td>
           <td id="oilCount" class="cashCount">0</td>
           <td id="oilMax" class="max"></td>
           <td id="oilMult" class="multiplier"></td>
         </tr>
         <tr>
+          <td id="metalLabel">Metal: </td>
+          <td id="metalCount" class="cashCount">0</td>
+          <td id="metalMax" class="max"></td>
+          <td id="metalMult" class="multiplier"></td>
+          <td class="spacer"></td>
           <td id="dnaLabel">???: </td>
           <td id="dnaCount" class="cashCount">0</td>
           <td id="dnaMax" class="max"></td>
@@ -106,9 +109,8 @@
       </div>
 
       <div id="buildings" class="gameTab" style="display:none;">
-        <table id="buildingTable" class="upgradeTable">
-
-        </table>
+        <table id="buildingTablestorage" class="upgradeTable"></table>
+        <table id="buildingTablemine" class="upgradeTable"></table>
       </div>
 
     </div>
