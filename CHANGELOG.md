@@ -1,3 +1,9 @@
+# Version 0.10.0a
+#### 11:11PM 10/01/2017
+Added more rockets
+
+Added more bugs
+
 # Version 0.9.0a
 #### 11:07PM 09/25/2017
 Fixed stuff

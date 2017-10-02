@@ -10,7 +10,9 @@ var properName = {
   "ambition" : "Ambition",
   "experience" : "Experience",
   "oil" : "Oil",
-  "dna" : "DNA Fragments"
+  "dna" : "DNA Fragments",
+  "metal" : "Metal",
+  "data" : "Data"
 }
 
 // ==CURRENCY==
@@ -18,36 +20,42 @@ var currency = {
   "dolans" : {
     "amount" : 0,
     "apc" : 1,
+    "aps" : 0,
     "mult" : 1,
     "max" : 1000
   },
   "ambition" : {
     "amount" : 0,
     "apc" : 1,
+    "aps" : 0,
     "mult" : 1,
     "max" : 1000
   },
   "experience" : {
     "amount" : 0,
     "apc" : 0,
+    "aps" : 0,
     "mult" : 1,
     "max" : 1000
   },
   "metal" : {
     "amount" : 0,
     "apc" : 0,
+    "aps" : 0,
     "mult" : 1,
     "max" : 1000
   },
   "oil" : {
     "amount" : 0,
     "apc" : 0,
+    "aps" : 0,
     "mult" : 1,
     "max" : 1000
   },
   "data" : {
     "amount" : 0,
     "apc" : 0,
+    "aps" : 0,
     "mult" : 1,
     "max" : 1000
   }
@@ -151,6 +159,36 @@ var rockets = {
       "experience" : 35
     }
   },
+  "luysin" : {
+    "name" : "Լուսին-4",
+    "amount" : 0,
+    "tier" : 2,
+    "cost" : {
+      "dolans" : 5000,
+      "ambition" : 2500,
+      "metal" : 250,
+      "oil" : 500
+    },
+    "aps" : {
+      "dolans" : 35,
+      "data" : 3
+    }
+  },
+  "m-aah" : {
+    "name" : "م اه",
+    "amount" : 0,
+    "tier" : 2,
+    "cost" : {
+      "dolans" : 10000,
+      "data" : 500,
+      "metal" : 1000,
+      "oil" : 2500
+    },
+    "aps" : {
+      "dolans" : 100,
+      "data" : 30
+    }
+  },
 }
 
 // ==JOBS==
@@ -190,8 +228,6 @@ var upgrades = {
     "name" : "Learn Algebra",
     "description" : "+ x1.125 multiplier to Dolans and Experience",
     "cost" : {
-      "dolans" : 0,
-      "ambition" : 0,
       "experience" : 1000
     }
   },
@@ -204,7 +240,6 @@ var upgrades = {
     "description" : "+ x1.125 multiplier to Dolans and Experience",
     "cost" : {
       "dolans" : 500,
-      "ambition" : 0,
       "experience" : 1000
     }
   },
@@ -216,9 +251,7 @@ var upgrades = {
     "name" : "A new bed",
     "description" : "+ x1.25 multiplier to Ambition",
     "cost" : {
-      "dolans" : 1000,
-      "ambition" : 0,
-      "experience" : 0
+      "dolans" : 1000
     }
   },
   "moreRockets" : {
@@ -250,7 +283,7 @@ var upgrades = {
     "onetime" : 0,
     "amount" : 0,
     "prerequisites" : ["moreRockets", "calculus"],
-    "function" : function(){upgradeLevels['rocket']=2;for(r in rockets){writeRocketHTML(r);}upgradeLevels['buildings']=1;for(b in buildings){writeBuildingHTML(b);}},
+    "function" : function(){upgradeLevels['rocket']=2;for(r in rockets){writeRocketHTML(r);}upgradeLevels['building']=1;for(b in buildings){writeBuildingHTML(b);}},
     "name" : "Even Better Rockets",
     "description" : "Learn how to build more rockets",
     "cost" : {
@@ -351,16 +384,11 @@ var upgradeLevels = {
   "building" : 0
 }
 
+//Worksafe?
+var worksafe = false;
+
 //Defaults
-var defaults = {
-  "currency" : currency,
-  "rockets" : rockets,
-  "jobs" : jobs,
-  "upgrades" : upgrades,
-  "upgradesHave" : upgradesHave,
-  "upgradeLevels" : upgradeLevels,
-  "buildings" : buildings
-}
+var defaults = '"\"N4IgTg9gxg1gpgFwM4gFyiQGwJYDsDmSAFhAmqAIYC2EArrmagAwC+ANCAEakKZySxE5ENToM0rDgAcAblAHxGlGvUaSQUCFSlg4SJHAAmFbGGGjVE9uGiKk2KgEZzK8c2sLE9qgCYXYtWskKVopXGwYZ3QRV0DrUPwwCkM9c0x8OE4k/0t3DgytRDAATxy3dVw4AHcAISMywI4aXQAlWy8Gqw4oCkwoWkxaFGiLcutmuDbBZD8R2KtrTlpsTEM8QmEpbHx8Ys4KXBhOvI0KKQoobARigDEIMABxXQoESv1jitJMiAgjuYCuiAqIhekgEPcKBkPtYICsEAc/soAScqHg4ABZEGYaFNNEAeRW0OsACsIJxhqAqFBDD9DHwKSBcNQ4GgQOioAARWn0kAcKr3GDrNAAM1BcA4FwQ2BkLNQCDAtHFGggYOEcAAHlJ+Ng4LgoLKfABWaxnKDCGmYA7DRwsILyn5SJawBlM4GsgDK4IgUhqtGdvJA/LAgoIIrFEqgUplaHliu6KqUIA1WrAOr1sscTCYEqonCu2AguDQhqzJqkZuiFqtaB8tus/TAuj1pUrEEtuAZozUEvLaEcTQGjH7QIo6r7WfU1DzUsLHx7FeHVEHfaao/HpY4ye1uv1c5EveYA8wQ9XY9QmY3QKxe9NEiPJ5HZ4v6lh2P+uWz+4rn6Xx5Xj/XdRjHhG8Dx/Zdz1PQDbQ4BIkhSJAAAkKGjVAAG0AF1YKkRJkjgAAZOAZUwBlPG7LhllWIV3BYIAAA=\""'
 
 //Create and save cookies
 function bake_cookie(name, value){
@@ -418,6 +446,15 @@ function save(type){
 function load(type){
   //Set the save data to empty so no *major* errors occur
   var saveData = [];
+  //Reset
+  if (type == "default"){
+    try{
+      saveData = JSON.parse(LZString.decompressFromBase64(defaults));
+    }
+    catch(e){
+      alert('Huston, we have a problem. We couldnt reset');
+    }
+  }
   //Manual loading from import
   if (type == "manual"){
     try{
@@ -447,20 +484,6 @@ function load(type){
   }
   catch (e) {
     console.log('An error occured while loading. Maybe there was no save file?')
-  }
-}
-
-//Reset
-function reset(){
-  var confirmed = window.confirm('Are you sure? This will wipe ALL progress');
-  if (confirmed){
-    currency = defaults["currency"];
-    rockets = defaults["rockets"];
-    jobs = defaults["jobs"];
-    upgrades = defaults["upgrades"];
-    upgradesHave = defaults["upgradesHave"];
-    upgradeLevels = defaults["upgradeLevels"];
-    buildings = defaults["buildings"];
   }
 }
 
@@ -501,6 +524,9 @@ function createBuilding(building){
     buildingText += '</td></tr>';
     return buildingText;
   }
+  else{
+    return '';
+  }
 }
 
 //Writes HTML for buildings
@@ -535,6 +561,7 @@ function createUpgrade(upgrade){
       return upgradeText;
     }
   }
+  return '';
 }
 
 //I guess this is an actual fucking issue then (See 'writeRocketHTML()')
@@ -648,12 +675,10 @@ function checkIfCanBuild(building, amount=1){
 
 //Updates GUI
 function updateInfo(){
-  $("#ambitionCount").text(Math.floor(currency['ambition']['amount']));
-  $("#ambitionMax").text("(Max "+ Math.floor(currency['ambition']['max']) + ")");
-  $("#dolansCount").text(Math.floor(currency['dolans']['amount']));
-  $("#dolansMax").text("(Max "+ Math.floor(currency['dolans']['max']) + ")");
-  $("#experienceCount").text(Math.floor(currency['experience']['amount']));
-  $("#experienceMax").text("(Max "+ Math.floor(currency['experience']['max']) + ")");
+  for (dolan in currency){
+    $('#' + dolan + 'Count').text(Math.floor(currency[dolan]['amount']));
+    $('#' + dolan + 'Max').text("(Max "+ Math.floor(currency[dolan]['max']) + ")");
+  }
 }
 
 //Changes tab
@@ -765,10 +790,23 @@ function addUpgradesToTable(){
   }
 }
 
+//Reset
+function reset(){
+  var confirmed = window.confirm('Are you sure? This will wipe ALL progress');
+  if (confirmed){
+    load('default');
+    save('auto');
+    for (dolan in currency){
+      $('#' + dolan + 'Mult').text('');
+    }
+    location.reload();
+  }
+}
+
 //Used for debug
 function ruinGame(){
   for (dolan in currency){
-    currency[dolan]['max'] = 1000000000000000;
+    currency[dolan]['max'] = 100000000000;
     currency[dolan]['amount'] = 100000000;
   }
 }
@@ -794,8 +832,8 @@ function initGame(){
   $('#rocketsTable').html(rockitboi);
 
   //Buildings
-  var builditboi1 = "";
-  var builditboi2
+  var builditboi1 = "<h4>Capacity</h4>";
+  var builditboi2 = "<h4>Mines</h4><tr></tr>";
   for (building in buildings){
     if (buildings[building]['type'] == 'storage')   { builditboi1 += createBuilding(building); }
     if (buildings[building]['type'] == 'mine')      { builditboi2 += createBuilding(building); }
@@ -825,8 +863,8 @@ function initGame(){
 function updateGame(){
   //Updates the multiplier
   for (dolan in currency){
-    if (currency[dolan][2] > 1){
-      $('#' + dolan + 'Mult').text('(x' + currency[dolan]['multiplier'] + ')')
+    if (currency[dolan]['mult'] > 1){
+      $('#' + dolan + 'Mult').text('(x' + currency[dolan]['mult'] + ')');
     }
   }
 

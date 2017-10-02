@@ -1,4 +1,4 @@
-# Space Clicker 0.9.0a
+# Space Clicker 0.10.0a
 ### By Gabriel Ch
 Space clicker is a clicker game where you build up your rockets and get to space!
 
