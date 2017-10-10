@@ -114,6 +114,11 @@ tr.spacer {
   color: #666;
 }
 
+.cost {
+  font-style: italic;
+  color: #666;
+}
+
 .amnt {
   text-align: right !important;
 }

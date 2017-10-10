@@ -1,3 +1,7 @@
+# Version 0.11.1a
+#### 05:39PM 10/10/2017
+Currency hotfix
+
 # Version 0.11.0a
 #### 11:22PM 10/09/2017
 Its getting a bit late, so here we go

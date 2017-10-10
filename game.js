@@ -4,6 +4,9 @@ var debug = false;
 //Times per second the game updates
 var gameSpeed = 1;
 
+//Game log
+var log = [];
+
 // ==PROPER NAME==
 var properName = {
   'dolans' : 'Dolans',
@@ -225,8 +228,7 @@ var jobs = {
       'ambition': 1000
     },
     'apc': {
-      'dolans': 10,
-      'experience' : 2
+      'dolans': 10
     }
   },
   'engineeringintern': {
@@ -238,8 +240,7 @@ var jobs = {
       'ambition': 5000
     },
     'apc': {
-      'dolans': 50,
-      'experience' : 15
+      'dolans': 50
     }
   }
 };
@@ -393,22 +394,22 @@ var buildings = {
   },
   'mineMetal' : {
     'name' : 'Iron Mines',
-    'description' : 'Increase Metal/second by 5',
+    'description' : 'Increase Metal/second by 1',
     'type' : 'mine',
     'amount' : 0,
     'tier' : 1,
-    'function' : function(){ currency['metal']['aps']+=5; },
+    'function' : function(){ currency['metal']['aps']+=1; },
     'cost' : {
       'dolans' : 500
     }
   },
   'mineOil' : {
     'name' : 'Oil Wells',
-    'description' : 'Increase Oil/second by 5',
+    'description' : 'Increase Oil/second by 1',
     'type' : 'mine',
     'amount' : 0,
     'tier' : 1,
-    'function' : function(){ currency['oil']['aps']+=5; },
+    'function' : function(){ currency['oil']['aps']+=1; },
     'cost' : {
       'dolans' : 500
     }
@@ -462,7 +463,7 @@ function makeSaveData(){
   for (upgrade in upgrades){ saveData['upgrades'][upgrade] = {}; saveData['upgrades'][upgrade]['amount'] = upgrades[upgrade]['amount']; }
   for (building in buildings){ saveData['buildings'][building] = {}; saveData['buildings'][building]['amount'] = buildings[building]['amount']; }
   for (job in jobs) { saveData['jobs'][job] = {}; saveData['jobs'][job]['working'] = jobs[job]['working']; }
-  for (dolan in currency) { saveData['currency'][dolan] = currency['dolan']; }
+  for (dolan in currency) { saveData['currency'][dolan] = currency[dolan]; }
   //Save all data, since all fields can be changed
   saveData['upgradesHave'] = upgradesHave;
   saveData['upgradeLevels'] = upgradeLevels;
@@ -527,17 +528,22 @@ function load(type){
   }
 }
 
+//Logging
+function gameLog(toLog){
+
+}
+
 function createJob(job){
   var jobText = '';
-  jobText += '<tr class="spacer"></tr><tr id="area' + job + '"><td id="' + job + 'Button" onclick="getJob(\''+job+'\')" class="button greyed-out">Work at ' + jobs[job]['name'] + '</td><td >' + jobs[job]['name'] + ':</td><td class="amnt">';
+  jobText += '<tr class="spacer"></tr><tr id="area' + job + '"><td id="' + job + 'Button" onclick="getJob(\''+job+'\')" class="button greyed-out">Work at ' + jobs[job]['name'] + '</td><td >' + jobs[job]['name'] + ':</td><td><span class="amnt">';
   for (dolan in jobs[job]['apc']){
     jobText += '+' + jobs[job]['apc'][dolan] + ' ' + properName[dolan] + '/click; ';
   }
-  jobText += '</td><td class="desc">';
+  jobText += '</span><br /><span class="cost">';
   for (dolan in jobs[job]['cost']){
-    jobText += '+' + jobs[job]['cost'][dolan] + ' ' + properName[dolan] + '; ';
+    jobText += jobs[job]['cost'][dolan] + ' ' + properName[dolan] + '; ';
   }
-  jobText += '</td></tr>';
+  jobText += '</span></td></tr>';
   return jobText;
 }
 
@@ -556,12 +562,12 @@ function createBuilding(building){
     buildingText += '<td id="' + building + 'Button100" onclick="buildBuild(\''+building+'\', 100)" class="smolbutton buildingBuy100 greyed-out" style="display:none">x100</td>';
     buildingText += '<td id="' + building + 'Button1000" onclick="buildBuild(\''+building+'\', 1000)" class="smolbutton buildingBuy1000 greyed-out" style="display:none">x1000</td>';
 
-    buildingText += '<td >' + buildings[building]['name'] + 's:</td><td id="amnt' + building + '" class="amnt">' + buildings[building]['amount'] + '</td><td class="desc">';
-    buildingText += buildings[building]['description'] + '<br />';
+    buildingText += '<td >' + buildings[building]['name'] + 's:</td><td id="amnt' + building + '" class="amnt">' + buildings[building]['amount'] + '</td><td><span class="amnt">';
+    buildingText += buildings[building]['description'] + '</span><br /><span class="cost">';
     for (i in buildings[building]['cost']){
       if (buildings[building]['cost'][i]>0){ buildingText += buildings[building]['cost'][i] + ' ' + properName[i] + '; '; }
     }
-    buildingText += '</td></tr>';
+    buildingText += '</span></td></tr>';
     return buildingText;
   }
   else{
@@ -596,11 +602,11 @@ function createUpgrade(upgrade){
         upgradeText += ': </td><td class="amnt" id="amnt' + upgrade + '">' + upgrades[upgrade]['amount'] + '</td>"';
       }
       else { upgradeText += '</td><td></td>"'; }
-      upgradeText += '<td>' + upgrades[upgrade]['description'] + '</td><td class="desc">';
+      upgradeText += '<td><span class="amnt">' + upgrades[upgrade]['description'] + '</span><br /><span class="cost">';
       for (dolan in upgrades[upgrade]['cost']){
         upgradeText += upgrades[upgrade]['cost'][dolan] + ' ' + properName[dolan] + '; ';
       }
-      upgradeText += '</td></tr>';
+      upgradeText += '</span></td></tr>';
       return upgradeText;
     }
   }
@@ -623,17 +629,22 @@ function createRocket(rocket){
     rocketText += '<td id="' + rocket + 'Button100" onclick="build(\''+rocket+'\', 100)" class="smolbutton rocketBuy100 greyed-out" style="display:none">x100</td>';
     rocketText += '<td id="' + rocket + 'Button1000" onclick="build(\''+rocket+'\', 1000)" class="smolbutton rocketBuy1000 greyed-out" style="display:none">x1000</td>';
 
-    rocketText += '<td >' + rockets[rocket]['name'] + 's:</td><td id="amnt' + rocket + '" class="amnt">' + rockets[rocket]['amount'] + '</td><td class="desc">';
-    for (dolan in currency){
-      if (rockets[rocket]['cost'][dolan] != null){
-        if (rockets[rocket]['cost'][dolan]>0){ rocketText += rockets[rocket]['cost'][dolan] + ' ' + properName[dolan] + '; '; }
+    rocketText += '<td >' + rockets[rocket]['name'] + 's:</td><td id="amnt' + rocket + '" class="amnt">' + rockets[rocket]['amount'] + '</td><td><span class="amnt">';
+    for (dolan in currency) {
+      if (rockets[rocket]['aps'][dolan] != null && rockets[rocket]['aps'][dolan] > 0) {
+        rocketText += rockets[rocket]['aps'][dolan] + ' ' + properName[dolan] + '/second; ';
       }
     }
-    rocketText += '<br />';
-    for (dolan in currency){
-      if (rockets[rocket]['aps'][dolan] != null && rockets[rocket]['aps'][dolan]>0){ rocketText += rockets[rocket]['aps'][dolan] + ' ' + properName[dolan] + '/second; '; }
+    rocketText += '</span><br /><span class="cost">';
+    for (dolan in currency) {
+      if (rockets[rocket]['cost'][dolan] != null) {
+        if (rockets[rocket]['cost'][dolan] > 0) {
+          rocketText += rockets[rocket]['cost'][dolan] + ' ' + properName[dolan] + '; ';
+        }
+      }
     }
-    rocketText += '</td></tr>';
+    
+    rocketText += '</span></td></tr>';
     return rocketText;
   }
 }
@@ -743,6 +754,7 @@ function build(rocket, amount=1){
       currency[dolan]['aps'] += rockets[rocket]['aps'][dolan] * amount;
     }
     $('#amnt'+rocket).text(rockets[rocket]['amount']);
+    gameLog('Bought x' + amount + ' ' + rocket + 's');
     updateInfo();
     greyOutRocket(rocket);
   }
@@ -902,7 +914,7 @@ function initGame(){
 
   //Set intervals
   window.setInterval(updateGame, 1000 * gameSpeed);
-  window.setInterval(save('auto'), 30000);
+  window.setInterval(save, 'auto', 15000);
 }
 
 //Updates the game, run every second
@@ -913,7 +925,7 @@ function updateGame(){
     // if (currency[dolan]['mult'] > 1){
     //   $('#' + dolan + 'Mult').text('(x' + currency[dolan]['mult'] + ')');
     if (currency[dolan]['aps'] > 0){
-      $('#' + dolan + 'Mult').text(currency[dolan]['aps'] + '/sec');
+      $('#' + dolan + 'Mult').text(Math.max(Math.ceil(currency[dolan]['aps'] * 10) / 10) + '/sec');
     }
   }
 
