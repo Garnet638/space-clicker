@@ -1,0 +1,35 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-undef": "off",
+        "no-console": "off",
+        "no-unused-vars": "off",
+        "array-bracket-newline": [
+            "error", 
+            {"multiline": true}
+        ],
+        "array-bracket-spacing": ["error", "never"],
+        "func-call-spacing": ["error", "never"]
+    }
+}

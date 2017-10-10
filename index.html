@@ -24,7 +24,7 @@
 
     <div id="credits">
       <p>
-        Version 0.10.0a<br />
+        Version 0.11.0a<br />
         Made by <a href="#" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
         View progress on <a href="https://trello.com/b/13JK4tRf/space-clicker">Trello</a><br />
         View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a><br />
@@ -86,7 +86,11 @@
           <td class="selectedTab gameTabSelector" id="tabrockets" onclick="tab('rockets');"><a>Rockets</a></td>
           <td class="gameTabSelector" id="tabjobs" onclick="tab('jobs');"><a>Jobs</a></td>
           <td class="gameTabSelector" id="tabupgrades" onclick="tab('upgrades');"><a>Upgrades</a></td>
+        </tr>
+        <tr>
           <td class="gameTabSelector" id="tabbuildings" onclick="tab('buildings');"><a>Buildings</a></td>
+          <td class="gameTabSelector" id="tabcolonies" onclick="tab('colonies');"><a>Colonies</a></td>
+          <td class="gameTabSelector" id="tabevolution" onclick="tab('evolution');"><a>Evolution</a></td>
         </tr>
       </table>
 
@@ -111,6 +115,20 @@
       <div id="buildings" class="gameTab" style="display:none;">
         <table id="buildingTablestorage" class="upgradeTable"></table>
         <table id="buildingTablemine" class="upgradeTable"></table>
+      </div>
+
+      <div id="colonies" class="gameTab" style="display:none;">
+        <table id="coloniesTable" class="upgradeTable">
+          <h4 class="warning">Coming soon!</h4>
+          <tr></tr>
+        </table>
+      </div>
+
+      <div id="evolution" class="gameTab" style="display:none;">
+        <table id="evolutionTable" class="upgradeTable">
+          <h4 class="warning">Coming soon!</h4>
+          <tr></tr>
+        </table>
       </div>
 
     </div>

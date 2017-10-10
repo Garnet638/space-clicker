@@ -1,3 +1,17 @@
+# Version 0.11.0a
+#### 11:22PM 10/09/2017
+Its getting a bit late, so here we go
+
+Added more jobs
+
+Added more tabs
+
+Fixed upgrade bug
+
+Changed multiplier to dolans/sec
+
+Changed the way saving works
+
 # Version 0.10.0a
 #### 11:11PM 10/01/2017
 Added more rockets
