@@ -1,3 +1,7 @@
+# Version 0.11.3a
+#### 11:16PM 10/11/2017
+Forgot to update the reset button for the new changes
+
 # Version 0.11.2a
 #### 11:12PM 10/11/2017
 Again, hotfixes
