@@ -177,8 +177,8 @@ var rockets = {
       'data' : 3
     }
   },
-  'm-aah' : {
-    'name' : 'م اه',
+  'apaulo' : {
+    'name' : 'A Paul-O',
     'amount' : 0,
     'tier' : 2,
     'cost' : {
@@ -333,6 +333,29 @@ var upgrades = {
       'experience' : 4500
     }
   },
+  'interplanetaryTravel': {
+    'onetime': 0,
+    'amount': 0,
+    'prerequisites': ['moreRockets2'],
+    'function': function () {
+      upgradeLevels['rocket'] = 3;
+      for (r in rockets) {
+        writeRocketHTML(r);
+      }
+      upgradeLevels['building'] = 2;
+      for (b in buildings) {
+        writeBuildingHTML(b);
+      }
+    },
+    'name': 'Interplanetary Travel',
+    'description': 'Travel to other planets',
+    'cost': {
+      'dolans': 30000,
+      'ambition': 10000,
+      'experience': 5000,
+      'data' : 5000
+    }
+  },
 };
 
 // ==BUILDINGS==
@@ -392,8 +415,21 @@ var buildings = {
       'oil' : 500
     }
   },
+  'datasf': {
+    'name': 'Data Storage Facility',
+    'description': 'Increase max Data by 1000',
+    'type': 'storage',
+    'amount': 0,
+    'tier': 1,
+    'function': function () {
+      currency['data']['max'] += 1000;
+    },
+    'cost': {
+      'data': 500
+    }
+  },
   'mineMetal' : {
-    'name' : 'Iron Mines',
+    'name' : 'Iron Mine',
     'description' : 'Increase Metal/second by 1',
     'type' : 'mine',
     'amount' : 0,
@@ -404,7 +440,7 @@ var buildings = {
     }
   },
   'mineOil' : {
-    'name' : 'Oil Wells',
+    'name' : 'Oil Well',
     'description' : 'Increase Oil/second by 1',
     'type' : 'mine',
     'amount' : 0,
@@ -429,7 +465,7 @@ var upgradeLevels = {
 var worksafe = false;
 
 //Defaults
-var defaults = 'N4IgTg9gxg1gpgFwM4gFyiQGwJYDsDmSAFhAmqAIYC2EArrmagAwC+ANCAEakKZySxE5ENToM0rDgAcAblAHxGlGvUaSQUCFSlg4SJHAAmFbGGGjVE9uGiKk2KgEZzK8c2sLE9qgCYXYtWskKVopXGwYZ3QRV0COTFoAT3tcf0t3DioAWgoKIjS3VmtQ/DAKQz1zTHw4TjKCuJAarUQwRIarDlw4AHcAISMOjJAaXQAlWy8h9SgKTChaBJRoi0LrUbgJwWQ/Fdira05abExDPEJhKWx8fETOClwYaetZqQoobAREgDEIMABxXQUBDdfTPLqkWoQCBPPYBTojRBzJAIP4UGrgkAQE4IB6w5Tw4ZUPBwACySMwmOJ3QA8idntYAFYQTjLUBUKCGaGGPhskA9P4wc5oABmyLgQQQkAgUiOsD5ArAQoIovF1k+eAQ/FS0UVyvwqswBmscAIJP45012uEeuFqDFRolL1oYF0uCg7XQxSkpXKegAEhQZHA0ABtAC6HBKZQqABk4MGjcJPGoOEcTmcVe4WEAAA=';
+var defaults = 'N4IgTg9gxg1gpgFwM4gFyiQGwJYDsDmSAFhAmqAIYC2EArrmagAwC+ANCAEakKZySxE5ENToM0rDgAcAblAHxGlGvUaSQUCFSlg4SJHAAmFbGGGjVE9uGiKk2KgEZzK8c2sLE9qgCYXYtWskKVopXGwYZ3QRV0COTFoAT3tcf0t3DioAWgoKIjS3VmtQ/DAKQz1zTHw4TjKCuJAarUQwRIarDlw4AHcAISMOjJAaXQAlWy8h9SgKTChaBJRoi0LrUbgJwWQ/FdjOkDwEfilMCm6ECjaAFTKZOExplmtOWmxMQzxCYSlsfHxEpxzjAnhxZlIKFBsAhEgAxCBgADiugoCG6+lBIFwpFqEAgIL2AQOVEQcyQCARFBqmIg70uuAJyiJw2MlyQADNMVQ8HAALKkx6E9LqbndADy7ye1gAVhBOMtQFQoIY8YY+AqQD0ETAvmh2WS4EEEJAIFJXrANVqwDqCHqDdZoUd+Klolabfg7ZgDNY4AQefwvk6wC7QG7dah9V7DdYFmBdLgoO1oiqzrgNas1BwKFIoGhHFmpMsmJlFox8yMKAAPPNMWvWaicR0QEMxZnFkQ5vMFoslzBlzJVmt1jhwStSAO+qBwaYF3PMbsSXv9ivV1COWsigUzjtz9vZnsjUtdldD9S0wVM4Wzxcdg9UI9rger9fDkCsijb7O7hfzw9949UIOa4bs8HAlGUFRIAAEhQ9xoAA2gAumBUilOUcAADJwPcXrCJ4mZcG8HzhkUQAAA==';
 
 //Create and save cookies
 function bake_cookie(name, value){
@@ -514,18 +550,13 @@ function load(type){
       console.log('Couldn\'t autoload');
     }
   }
-  try{
-    for (rocket in rockets){ rockets[rocket]['amount'] = saveData['rockets'][rocket]['amount']; }
-    for (upgrade in upgrades){ upgrades[upgrade]['amount'] = saveData['upgrades'][upgrade]['amount']; }
-    for (building in buildings){ buildings[building]['amount'] = saveData['buildings'][building]['amount']; }
-    for (job in jobs) { jobs[job]['working'] = saveData ['jobs'][job]['working']; }
-    for (dolan in currency) { currency[dolan] = saveData['currency'][dolan]; }
-    upgradesHave = saveData['upgradesHave'];
-    upgradeLevels = saveData['upgradeLevels'];
-  }
-  catch (e) {
-    console.log('An error occured while loading. Maybe there was no save file?');
-  }
+  try{ for (rocket in rockets){ rockets[rocket]['amount'] = saveData['rockets'][rocket]['amount']; } } catch (e) { console.log('Couldn\'t load ' + rocket); }
+  try{ for (upgrade in upgrades){ upgrades[upgrade]['amount'] = saveData['upgrades'][upgrade]['amount']; } } catch (e) { console.log('Couldn\'t load ' + upgrade); }
+  try{ for (building in buildings){ buildings[building]['amount'] = saveData['buildings'][building]['amount']; } } catch (e) { console.log('Couldn\'t load ' + building); }
+  try{ for (job in jobs) { jobs[job]['working'] = saveData ['jobs'][job]['working']; } } catch (e) { console.log('Couldn\'t load ' + job); }
+  try{ for (dolan in currency) { currency[dolan] = saveData['currency'][dolan]; } } catch (e) { console.log('Couldn\'t load ' + dolan); }
+  if (saveData['upgradesHave'] != null) { try{ upgradesHave = saveData['upgradesHave']; } catch (e) { console.log('Couldn\'t load upgradesHave'); } }
+  if (saveData['upgradeLevels'] != null) { try{ upgradeLevels = saveData['upgradeLevels']; } catch (e) { console.log('Couldn\'t load upgradeLevels'); } }
 }
 
 //Logging
@@ -535,7 +566,12 @@ function gameLog(toLog){
 
 function createJob(job){
   var jobText = '';
-  jobText += '<tr class="spacer"></tr><tr id="area' + job + '"><td id="' + job + 'Button" onclick="getJob(\''+job+'\')" class="button greyed-out">Work at ' + jobs[job]['name'] + '</td><td >' + jobs[job]['name'] + ':</td><td><span class="amnt">';
+  if (jobs[job]['working'] == false){
+    jobText += '<tr class="spacer"></tr><tr id="area' + job + '"><td id="' + job + 'Button" onclick="getJob(\''+job+'\')" class="button greyed-out">Work at ' + jobs[job]['name'] + '</td><td >' + jobs[job]['name'] + ':</td><td><span class="amnt">';
+  }
+  else {
+    jobText += '<tr class="spacer"></tr><tr id="area' + job + '"><td id="' + job + 'Button" class="button greyed-out">You already work here</td><td >' + jobs[job]['name'] + ':</td><td><span class="amnt">';
+  }
   for (dolan in jobs[job]['apc']){
     jobText += '+' + jobs[job]['apc'][dolan] + ' ' + properName[dolan] + '/click; ';
   }
@@ -921,11 +957,11 @@ function initGame(){
 function updateGame(){
   //Updates the multiplier
   for (dolan in currency){
-    currency[dolan]['amount'] += currency[dolan]['aps'];
+    currency[dolan]['amount'] += currency[dolan]['aps'] * currency[dolan]['mult'];
     // if (currency[dolan]['mult'] > 1){
     //   $('#' + dolan + 'Mult').text('(x' + currency[dolan]['mult'] + ')');
     if (currency[dolan]['aps'] > 0){
-      $('#' + dolan + 'Mult').text(Math.max(Math.ceil(currency[dolan]['aps'] * 10) / 10) + '/sec');
+      $('#' + dolan + 'Mult').text(Math.max(Math.ceil(currency[dolan]['aps'] * currency[dolan]['mult'] * 10) / 10) + '/sec');
     }
   }
 
@@ -941,15 +977,20 @@ function updateGame(){
   //Update job buy buttons
   for (job in jobs){
     if (checkIfCanWork(job)){$('#'+job+'Button').removeClass('greyed-out');}
+    else {$('#'+job+'Button').addClass('greyed-out');}
   }
 
   //Update upgrade buy buttons
   for (upgrade in upgrades){
     if (checkIfCanUpgrade(upgrade)){$('#'+upgrade+'Button').removeClass('greyed-out');}
+    else {$('#'+upgrade+'Button').addClass('greyed-out');}
   }
 
   for (building in buildings){
     greyOutBuilding(building);
+
+    if (buildings[building]['amount'] >= 100){ $('.buildingBuy100').slideDown(0); }
+    if (buildings[building]['amount'] >= 1000){ $('.buildingBuy1000').slideDown(0); }
   }
 
   for (dolan in currency){

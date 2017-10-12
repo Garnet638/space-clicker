@@ -1,6 +1,26 @@
+# Version 0.11.2a
+#### 11:12PM 10/11/2017
+Again, hotfixes
+
+Fixed the saving/loading failsafe
+
+Fixed currency
+
+Fixed jobs not showing as working on reload
+
+Fixed jobs and upgrades not greying out
+
+Added the functionality for x100 and x1000 building buys, as for some reason I never added the code to make them show
+
 # Version 0.11.1a
 #### 05:39PM 10/10/2017
 Currency hotfix
+
+Prettication
+
+Nerfed some stuff
+
+_Note to self, make branches_
 
 # Version 0.11.0a
 #### 11:22PM 10/09/2017
