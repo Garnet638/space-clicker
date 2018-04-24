@@ -10,7 +10,7 @@ body {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover;
+  background-size: 100% auto;
 }
 
 h1 {
@@ -49,6 +49,11 @@ tr.spacer {
 .multiplier {
   font-size: 15px;
   color: #0c0;
+}
+
+.multiplierNeg {
+  font-size: 15px;
+  color: #c00;
 }
 
 .max {
@@ -163,6 +168,10 @@ tr.spacer {
   color: white;
 }
 
+/* 
+ *  CURRENCIES
+ */
+
 #info {
   text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
   font-family: 'Roboto Slab', sans-serif;
@@ -197,6 +206,28 @@ tr.spacer {
   text-align: right;
 }
 
+#colonyMoney {
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 20px;
+  color: white;
+}
+
+#colonyMoney tr td {
+  text-align: left;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+#colonyMoney tr td.cashCount {
+  text-align: right;
+}
+
+
+/* 
+ *  GAME LAYOUT
+ */
+
 #game-left {
   position: absolute;
   left: 10px;
@@ -206,6 +237,46 @@ tr.spacer {
   position: absolute;
   right: 10px;
 }
+
+#tabs {
+  border-collapse: collapse;
+  position: relative;
+  top: 1px;
+}
+
+#tabs tr td {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Chrome/Future-proofing */
+  font-family: 'Roboto Slab', sans-serif;
+  border: 3px solid black;
+  background-color: #888;
+  text-align: center;
+  width: 150px;
+  height: 30px;
+}
+
+#tabs tr td.selectedTab {
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  border: 3px solid black;
+  background-color: #fff;
+  border-bottom: none;
+  color: white;
+}
+
+
+/* 
+ *  CREDITS
+ */
 
 #credits {
   position: fixed;
@@ -232,34 +303,8 @@ tr.spacer {
   color: #0ff
 }
 
-#tabs {
-  border-collapse: collapse;
-  position:relative;
-  top: 1px;
-}
 
-#tabs tr td {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Safari */
-   -khtml-user-select: none;   /* Konqueror HTML */
-     -moz-user-select: none;   /* Firefox */
-      -ms-user-select: none;   /* Internet Explorer/Edge */
-          user-select: none;   /* Chrome/Future-proofing */
-  font-family: 'Roboto Slab', sans-serif;
-  border: 3px solid black;
-  background-color: #888;
-  text-align: center;
-  width: 150px;
-  height: 30px;
-}
 
-#tabs tr td.selectedTab {
-  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-  border: 3px solid black;
-  background-color: #fff;
-  border-bottom: none;
-  color: white;
-}
 
 .upgradeTable tr td {
   text-align: left;

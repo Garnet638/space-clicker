@@ -4,6 +4,9 @@ var debug = false;
 //Times per second the game updates
 var gameSpeed = 1;
 
+//Seconds left to save
+var secToSave = 180;
+
 //Game log
 var log = [];
 
@@ -192,6 +195,22 @@ var rockets = {
       'data' : 30
     }
   },
+  'apaulo2': {
+    'name': 'A Paul-O 2 Electric Boogaloo',
+    'amount': 0,
+    'tier': 3,
+    'cost': {
+      'dolans': 50000,
+      'data': 5000,
+      'metal': 3000,
+      'oil': 7500
+    },
+    'aps': {
+      'dolans': 500,
+      'data': 125,
+      'ambition': 100
+    }
+  },
 };
 
 // ==JOBS==
@@ -346,6 +365,7 @@ var upgrades = {
       for (b in buildings) {
         writeBuildingHTML(b);
       }
+      beginColonizing();
     },
     'name': 'Interplanetary Travel',
     'description': 'Travel to other planets',
@@ -354,6 +374,23 @@ var upgrades = {
       'ambition': 10000,
       'experience': 5000,
       'data' : 5000
+    }
+  },
+  'materialWorld': {
+    'onetime': 0,
+    'amount': 0,
+    'prerequisites': ['interplanetaryTravel'],
+    'function': function () {
+      currency['oil']['mult'] += .25;
+      currency['metal']['mult'] += .25;
+    },
+    'name': 'Better harvesting',
+    'description': '+ x1.25 multiplier to Metal and Oil',
+    'cost': {
+      'dolans': 100000,
+      'experience': 50000,
+      'oil' : 7500,
+      'metal' : 7500
     }
   },
 };
@@ -461,11 +498,20 @@ var upgradeLevels = {
   'building' : 0
 };
 
+var colonies = {
+  'colonies' : { 'amnt' : 0, 'aps' : 0, 'mult' : 1, 'blds' : 0, 'blda' : 0 },
+  'space' : { 'amnt' : 0, 'aps' : 0, 'mult' : 1, 'blds' : 0, 'blda' : 0 },
+  'food' : { 'amnt' : 0, 'aps' : 0, 'mult' : 1, 'blds' : 0, 'blda' : 10 },
+  'water' : { 'amnt' : 0, 'aps' : 0, 'mult' : 1, 'blds' : 0, 'blda' : 10 },
+  'pop' : { 'amnt' : 0, 'aps' : 0, 'mult' : 1, 'blds' : 0, 'blda' : 0 },
+  'military' : { 'amnt' : 0, 'aps' : 0, 'mult' : 1, 'blds' : 0, 'blda' : 0 },
+};
+
 //Worksafe?
 var worksafe = false;
 
 //Defaults
-var defaults = 'N4IgTg9gxg1gpgFwM4gFyiQGwJYDsDmSAFhAmqAIYC2EArrmagAwC+ANCAEakKZySxE5ENToM0rDgAcAblAHxGlGvUaSQUCFSlg4SJHAAmFbGGGjVE9uGiKk2KgEZzK8c2sLE9qgCYXYtWskKVopXGwYZ3QRV0COTFoAT3tcf0t3DgopClpMCDS3VmtQ/DAKQz1zTHw4TjKCuJAarUQwRIarDlw4AHcAISMOjJAaXQAlWy8h9SgKTChc2hRoi0LrUbgJwWQ/FdjOkDwEfilMCm6ECjaAFTKZOExplmtOWmxMQzxCYSlsfHxEpxzjAnhxZtkoNgEIkAGIQMAAcV0FAQ3X0oJAuFItQgEBBewCByoiDmSAQ8IoNQxEHel1w+OUhOGxkuSAAZhiqHg4ABZEmPAnpdRc7oAeXeT2sACsIJxlqAqFBDLjDHx5SAevCYF80GzSXAgghIBApK9YOrNWBtQRdfrrFCjvxUtFLdb8LbMAZrHACNz+F9HWBnaBXTrUHrPQbrAswLpcFB2tFlWdcOrVmpMlIoGhHJnlkwOFRcoxcyMKAAPHNMavWaicB0QYMxJkFkRZnN5iSF4sdsuV1COavqODlqT+n1QODTTPZ5iducjHsDwsVqs1wv86dt2etrL57uYEsr/uD9cgGkCxlCmddtv7xeH3tUVcDofWFkULdZHfz1tFx/Ln2a5FBwJRlBUSAABIUPcaAANoALqgVIpTlHAAAycD3J6wieBmXBvB8YZFEAA=';
+var defaults = 'N4IgTg9gxg1gpgFwM4gFyiQGwJYDsDmSAFhAmqAIYC2EArrmagAwC+ANCAEakKZySxE5ENToM0rDgAcAblAHxGlGvUaSQUCFSlg4SJHAAmFbGGGjVE9uGiKk2KgEZzK8c2sLE9qgCYXYtWskKVopXGwYZ3QRV0COTFoAT3tcf0t3DgopClpMCDS3dSycvL9oi0KWa1D8MApDPXNMfDhOOoK4kBatRDBEjqsOXDgAdwAhIwGMkBpdACVbLyn1KApMKFzaFHLYwZmIecXkMuUAvbwEfilMCmGECj6AFTqZOExl6yoKS7BsNYB1A6YQwfaycWjYYF4QjCKTYfD4RKcW4wD4cVbZKDYBCJABiBwA4rpvsN9GiQLhSK0IBBUTsztMqIg1kgEAcKC1yRBIfdcHTTul1MZ7kgAGbkqh4OAAWWZ73pgs+UoA8pDQRwAFYQTjbUBUKCGGmGPi6kAjA4waFoUUsuBBBCQCBScGwU3msCWgjW23WbEXfipaLuz34b2YAzWOAEKX8aH+sCB0DBq2oG3hu3WDZgXS4KD9aKGm64U0VNSZKRQNCOcvbJgcKi5RjVmYUAAeVaYnes1E4fogiZiDLrIgrVZrEnrjbHLfbqEcnfUcFbUljUagcGW5crzHHO5mU7n9bbHa79blm5H2+HWVrk8wTaPs/np5A3PlAsKW4nI9v+/v06+J8F2sYUKAvLIr13YcG3/Q8ZxPVhqikWp6j0AAJChXjQABtABdDgajqBoABk4FecNhE8MsuAhKEvWmTQ8nCRpokY/tsBY5RPx/b8YIfLhgV/ThgTA6ZggodcXG4m9eIPZthMMISRL2UUjSk6iZL3PjpwUpTjA7awRm+fh1O/TToLkjhdO/BTRPnawpCdUy93Mu9+OsvdbL2SUcHuPpnOvKRf20uCPOHLz3CqIAAA==';
 
 //Create and save cookies
 function bake_cookie(name, value){
@@ -492,7 +538,8 @@ function makeSaveData(){
     'jobs' : {},
     'currency' : {},
     'upgradesHave' : {},
-    'upgradeLevels' : {}
+    'upgradeLevels' : {},
+    'colonies' : {},
   };
   //Iterate through each and only save the amount you have
   for (rocket in rockets){ saveData['rockets'][rocket] = {}; saveData['rockets'][rocket]['amount'] = rockets[rocket]['amount']; }
@@ -500,10 +547,22 @@ function makeSaveData(){
   for (building in buildings){ saveData['buildings'][building] = {}; saveData['buildings'][building]['amount'] = buildings[building]['amount']; }
   for (job in jobs) { saveData['jobs'][job] = {}; saveData['jobs'][job]['working'] = jobs[job]['working']; }
   for (dolan in currency) { saveData['currency'][dolan] = currency[dolan]; }
+  for (colony in colonies) { saveData['colonies'][colony] = colonies[colony]; }
   //Save all data, since all fields can be changed
   saveData['upgradesHave'] = upgradesHave;
   saveData['upgradeLevels'] = upgradeLevels;
   return saveData;
+}
+
+function setTheShit(saveData){
+  try{ for (rocket in saveData['rockets']){ rockets[rocket]['amount'] = saveData['rockets'][rocket]['amount']; } } catch (e) { console.log('Couldn\'t load ' + rocket + '\n' + e); }
+  try{ for (upgrade in saveData['upgrades']){ upgrades[upgrade]['amount'] = saveData['upgrades'][upgrade]['amount']; } } catch (e) { console.log('Couldn\'t load ' + upgrade + '\n' + e); }
+  try{ for (building in saveData['buildings']){ buildings[building]['amount'] = saveData['buildings'][building]['amount']; } } catch (e) { console.log('Couldn\'t load ' + building + '\n' + e); }
+  try{ for (job in saveData['jobs']) { jobs[job]['working'] = saveData ['jobs'][job]['working']; } } catch (e) { console.log('Couldn\'t load ' + job + '\n' + e); }
+  try{ for (dolan in saveData['currency']) { currency[dolan] = saveData['currency'][dolan]; } } catch (e) { console.log('Couldn\'t load ' + dolan + '\n' + e); }
+  try{ for (colony in saveData['colonies']) { colonies[colony] = saveData['colonies'][colony]; } } catch (e) { console.log('Couldn\'t load ' + colony + '\n' + e); }
+  if (saveData['upgradesHave'] != null) { try{ upgradesHave = saveData['upgradesHave']; } catch (e) { console.log('Couldn\'t load upgradesHave' + '\n' + e); } }
+  if (saveData['upgradeLevels'] != null) { try{ upgradeLevels = saveData['upgradeLevels']; } catch (e) { console.log('Couldn\'t load upgradeLevels' + '\n' + e); } }
 }
 
 //Save
@@ -531,6 +590,7 @@ function load(type){
     catch(e){
       alert('Huston, we have a problem. We couldnt reset');
     }
+    setTheShit(saveData);
   }
   //Manual loading from import
   if (type == 'manual'){
@@ -540,6 +600,9 @@ function load(type){
     catch(e){
       alert('Invalid save data entered');
     }
+    setTheShit(saveData);
+    save('auto');
+    initGame();
   }
   //Auto loading when page is vitited
   if (type == 'auto'){
@@ -547,16 +610,10 @@ function load(type){
       saveData = JSON.parse(LZString.decompressFromBase64(eat_cookie('saveData')));
     }
     catch(e) {
-      console.log('Couldn\'t autoload');
+      console.log('Couldn\'t autoload\n' + saveData + '\n' + e);
     }
+    setTheShit(saveData);
   }
-  try{ for (rocket in rockets){ rockets[rocket]['amount'] = saveData['rockets'][rocket]['amount']; } } catch (e) { console.log('Couldn\'t load ' + rocket); }
-  try{ for (upgrade in upgrades){ upgrades[upgrade]['amount'] = saveData['upgrades'][upgrade]['amount']; } } catch (e) { console.log('Couldn\'t load ' + upgrade); }
-  try{ for (building in buildings){ buildings[building]['amount'] = saveData['buildings'][building]['amount']; } } catch (e) { console.log('Couldn\'t load ' + building); }
-  try{ for (job in jobs) { jobs[job]['working'] = saveData ['jobs'][job]['working']; } } catch (e) { console.log('Couldn\'t load ' + job); }
-  try{ for (dolan in currency) { currency[dolan] = saveData['currency'][dolan]; } } catch (e) { console.log('Couldn\'t load ' + dolan); }
-  if (saveData['upgradesHave'] != null) { try{ upgradesHave = saveData['upgradesHave']; } catch (e) { console.log('Couldn\'t load upgradesHave'); } }
-  if (saveData['upgradeLevels'] != null) { try{ upgradeLevels = saveData['upgradeLevels']; } catch (e) { console.log('Couldn\'t load upgradeLevels'); } }
 }
 
 //Logging
@@ -884,6 +941,88 @@ function addUpgradesToTable(){
   }
 }
 
+//Open up colony shit
+function beginColonizing(){
+  if (upgradesHave.indexOf('interplanetaryTravel') > -1){
+    $('#coloniesWarning').slideUp(0);
+    $('#colonyMoney').slideDown(0);
+    $('#colonyUpgrades').slideDown(0);
+  }
+}
+
+//Create a colony
+function colonize(){
+  if (currency['dolans']['amount'] >= 100000){
+    if (currency['oil']['amount'] >= 50000) {
+      if (currency['metal']['amount'] >= 50000) {
+        if (currency['data']['amount'] >= 10000) {
+          //Remove money
+          currency['dolans']['amount'] -= 100000;
+          currency['oil']['amount']    -= 50000;
+          currency['metal']['amount']  -= 50000;
+          currency['data']['amount']   -= 10000;
+
+          //Add space and colony
+          colonies['colonies']['amnt'] += 1;
+          colonies['space']['amnt'] += Math.floor(Math.random() * 50) + 10;
+        }
+      }
+    }
+  }
+}
+
+//Build a colony building
+function buildColony(building, amount = 1) {
+  if (checkIfCanBuildColony(building, amount)) {
+    if (building == 'food') {
+      colonies['food']['blds'] += amount;
+      currency['dolans']['amount'] -= 10000 * amount;
+    }
+    if (building == 'water') {
+      colonies['water']['blds'] += amount;
+      currency['dolans']['amount'] -= 10000 * amount;
+    }
+
+
+    $('#amnt' + building + 'Colony').text(colonies[building]['blds']);
+    updateInfo();
+    greyOutColonyBuilding(building);
+  }
+}
+
+//Check if can build colony stuff
+function checkIfCanBuildColony(building, amount = 1) {
+  if (colonies['space']['amnt'] >= amount){
+    if (building == 'food') { if (currency['dolans']['amount'] >= 10000*amount) { return true; } else { return false; } }
+    if (building == 'water') { if (currency['dolans']['amount'] >= 10000*amount) { return true; } else { return false; } }
+  }
+  return false;
+}
+
+//Greys out colony building
+function greyOutColonyBuilding(building) {
+  if (checkIfCanBuildColony(building)) {
+    $('#' + building + 'ColonyButton').removeClass('greyed-out');
+  } else {
+    $('#' + building + 'ColonyButton').addClass('greyed-out');
+  }
+  if (checkIfCanBuildColony(building, 10)) {
+    $('#' + building + 'ColonyButton10').removeClass('greyed-out');
+  } else {
+    $('#' + building + 'ColonyButton10').addClass('greyed-out');
+  }
+  if (checkIfCanBuildColony(building, 100)) {
+    $('#' + building + 'ColonyButton100').removeClass('greyed-out');
+  } else {
+    $('#' + building + 'ColonyButton100').addClass('greyed-out');
+  }
+  if (checkIfCanBuildColony(building, 1000)) {
+    $('#' + building + 'ColonyButton1000').removeClass('greyed-out');
+  } else {
+    $('#' + building + 'ColonyButton1000').addClass('greyed-out');
+  }
+}
+
 //Reset
 function reset(){
   var confirmed = window.confirm('Are you sure? This will wipe ALL progress');
@@ -912,22 +1051,22 @@ function initGame(){
   if (debug == false){ load('auto'); }
 
   //Jobs
-  var jobText = '';
+  var jobText = $('#jobsTable').html();
   for (job in jobs){
     jobText += createJob(job);
   }
   $('#jobsTable').html(jobText);
 
   //Rockets
-  var rockitboi = '';
+  var rockitboi = $('#rocketsTable').html();
   for (rocket in rockets){
     rockitboi += createRocket(rocket);
   }
   $('#rocketsTable').html(rockitboi);
 
   //Buildings
-  var builditboi1 = '<h4>Capacity</h4>';
-  var builditboi2 = '<h4>Mines</h4><tr></tr>';
+  var builditboi1 = $('#buildingTablestorage').html();
+  var builditboi2 = $('#buildingTablemine').html();
   for (building in buildings){
     if (buildings[building]['type'] == 'storage')   { builditboi1 += createBuilding(building); }
     if (buildings[building]['type'] == 'mine')      { builditboi2 += createBuilding(building); }
@@ -948,9 +1087,7 @@ function initGame(){
     $('#upgradesBought').html($('#upgradesBought').html() + '<strong>' + upgrades[upgradesHave[i]]['name'] + ': </strong>' + upgrades[upgradesHave[i]]['description']+ '<br />');
   }
 
-  //Set intervals
-  window.setInterval(updateGame, 1000 * gameSpeed);
-  window.setInterval(save, 'auto', 15000);
+  beginColonizing();
 }
 
 //Updates the game, run every second
@@ -999,6 +1136,41 @@ function updateGame(){
     }
   }
 
+  for (building in colonies) {
+    greyOutColonyBuilding(building);
+
+    colonies[building]['amnt'] += colonies[building]['aps'] * colonies[building]['mult'];
+    $('#' + building + 'Count').text(colonies[building]['amnt']);
+    if (colonies[building]['aps'] > 0) {
+      $('#' + building + 'Mult').text(Math.max(Math.ceil(colonies[building]['aps'] * colonies[building]['mult'] * 10) / 10) + '/sec');
+    }
+
+    if (colonies[building]['amnt'] >= 100) {
+      $('.colbuildingBuy100').slideDown(0);
+    }
+    if (colonies[building]['amnt'] >= 1000) {
+      $('.colbuildingBuy1000').slideDown(0);
+    }
+  }
+
+  if (currency['dolans']['amount'] >= 100000) {
+    if (currency['oil']['amount'] >= 50000) {
+      if (currency['metal']['amount'] >= 50000) {
+        if (currency['data']['amount'] >= 10000) {
+          $('#colonizeButton').removeClass('greyed-out');
+        } else { $('#colonizeButton').addClass('greyed-out'); }
+      } else { $('#colonizeButton').addClass('greyed-out'); }
+    } else { $('#colonizeButton').addClass('greyed-out'); }
+  } else { $('#colonizeButton').addClass('greyed-out'); }
+
+  secToSave--;
+  if (secToSave == 0){
+    secToSave = 180;
+    save('auto');
+  }
+
   //Update GUI
   updateInfo();
 }
+
+window.setInterval(updateGame, 1000 * gameSpeed);

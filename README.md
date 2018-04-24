@@ -1,4 +1,4 @@
-# Space Clicker 0.11.3a
+# Space Clicker 0.12.0a
 ### By Gabriel Ch
 Space clicker is a clicker game where you build up your rockets and get to space!
 
@@ -7,3 +7,5 @@ Currently, the game is in alpha. I'm still getting core functionality to work, s
 [Play here!](https://garnet638.github.io/space-clicker/)
 
 [View changelog](https://github.com/Garnet638/space-clicker/blob/master/CHANGELOG.md)
+
+[My website](https://gabrielchantayan.com)

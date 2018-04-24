@@ -24,8 +24,8 @@
 
     <div id="credits">
       <p>
-        Version 0.11.3a<br />
-        Made by <a href="#" onclick="alert('Sorry, my webite\'s not up yet. I\'ll link to it when it is')">Gabriel Ch.</a><br />
+        Version 0.12.0a<br />
+        Made by <a href="https://gabrielchantayan.com">Gabriel Chantayan</a><br />
         View progress on <a href="https://trello.com/b/13JK4tRf/space-clicker">Trello</a><br />
         View source code on <a href="https://github.com/Garnet638/space-clicker">Github</a><br />
         <span class="warning">This game is still in alpha. Stuff may break</span>
@@ -113,14 +113,87 @@
       </div>
 
       <div id="buildings" class="gameTab" style="display:none;">
-        <table id="buildingTablestorage" class="upgradeTable"></table>
-        <table id="buildingTablemine" class="upgradeTable"></table>
+        <table id="buildingTablestorage" class="upgradeTable"><h4>Capacity</h4></table>
+        <table id="buildingTablemine" class="upgradeTable"><h4>Mines</h4><tr></tr></table>
       </div>
 
       <div id="colonies" class="gameTab" style="display:none;">
-        <table id="coloniesTable" class="upgradeTable">
-          <h4 class="warning">Coming soon!</h4>
-          <tr></tr>
+        <h4 id="coloniesWarning">Buy "Interplanetary Travel" to unlock colonies</h4>
+        <table id="colonyMoney" style="display:none;">
+          <tr>
+            <td id="coloniesLabel">Colonies: </td>
+            <td id="coloniesCount" class="cashCount">0</td>
+            <td id="coloniesMax" class="max"></td>
+            <td id="coloniesMult" class="multiplier"></td>
+            <td class="spacer"></td>
+            <td id="spaceLabel">Area Left: </td>
+            <td id="spaceCount" class="cashCount">0</td>
+            <td id="spaceMax" class="max"></td>
+            <td id="spaceMult" class="multiplier"></td>
+          </tr>
+          <tr>
+            <td id="foodLabel">Food: </td>
+            <td id="foodCount" class="cashCount">0</td>
+            <td id="foodMax" class="max"></td>
+            <td id="foodMult" class="multiplier"></td>
+            <td class="spacer"></td>
+            <td id="waterLabel">Water: </td>
+            <td id="waterCount" class="cashCount">0</td>
+            <td id="waterMax" class="max"></td>
+            <td id="waterMult" class="multiplier"></td>
+          </tr>
+          <tr>
+            <td id="popLabel">Population: </td>
+            <td id="popCount" class="cashCount">0</td>
+            <td id="popMax" class="max"></td>
+            <td id="popMult" class="multiplier"></td>
+            <td class="spacer"></td>
+            <td id="militaryLabel">Military: </td>
+            <td id="militaryCount" class="cashCount">0</td>
+            <td id="militaryMax" class="max"></td>
+            <td id="militaryMult" class="multiplier"></td>
+          </tr>
+        </table>
+
+        <table id="colonyUpgrades" class="upgradeTable" style="display:none;">
+          
+          <tr id="colonizeThings">
+            <td id="colonizeButton" onclick="colonize()" class="button">Colonize a planet</td>
+            <td></td><td style="display:none"></td><td style="display:none"></td><td></td><td></td>
+            <td>
+              <span class="amnt">Colonize a planet and get 10-50 space</span>
+              <br>
+              <span class="cost">100000 Dolans; 50000 Metal; 50000 Oil; 10000 Data</span>
+            </td>
+          </tr>
+
+          <tr id="areafoodColony">
+            <td id="foodColonyButton" onclick="buildColony('food')" class="button">Build a Farm</td>
+            <td id="foodColonyButton10" onclick="buildColony('food', 10)" class="smolbutton colbuildingBuy10">x10</td>
+            <td id="foodColonyButton100" onclick="buildColony('food', 100)" class="smolbutton colbuildingBuy100"style="display:none">x100</td>
+            <td id="foodColonyButton1000" onclick="buildColony('food', 1000)" class="smolbutton colbuildingBuy1000 greyed-out" style="display:none">x1000</td>
+            <td>Farms: </td>
+            <td id="amntfoodColony" class="amnt">0</td>
+            <td>
+              <span class="amnt">Increase Food/sec by 10</span>
+              <br>
+              <span class="cost">10000 Dolans; </span>
+            </td>
+          </tr>
+
+          <tr id="areawaterColony">
+            <td id="waterColonyButton" onclick="buildColony('water')" class="button">Build a Pump</td>
+            <td id="waterColonyButton10" onclick="buildColony('water', 10)" class="smolbutton colbuildingBuy10">x10</td>
+            <td id="waterColonyButton100" onclick="buildColony('water', 100)" class="smolbutton colbuildingBuy100"style="display:none">x100</td>
+            <td id="waterColonyButton1000" onclick="buildColony('water', 1000)" class="smolbutton colbuildingBuy1000 greyed-out" style="display:none">x1000</td>
+            <td>Pumps: </td>
+            <td id="amntwaterColony" class="amnt">0</td>
+            <td>
+              <span class="amnt">Increase Water/sec by 10</span>
+              <br>
+              <span class="cost">10000 Dolans; </span>
+            </td>
+          </tr>
         </table>
       </div>
 

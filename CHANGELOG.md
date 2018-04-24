@@ -1,3 +1,19 @@
+# Version 0.12.0a
+#### 
+Added new rockets
+
+Added backwards/forwards compatability
+
+Added link to my website
+
+Added framework for colonies, still much work to do
+
+Fixed Autosave
+
+Fixed a bug when loading the game, newly unlocked things wouldn't load
+
+Changed changelog so everything is listed in Added/Fixed/Changed/Removed order
+
 # Version 0.11.3a
 #### 11:16PM 10/11/2017
 Forgot to update the reset button for the new changes
@@ -6,6 +22,8 @@ Forgot to update the reset button for the new changes
 #### 11:12PM 10/11/2017
 Again, hotfixes
 
+Added the functionality for x100 and x1000 building buys, as for some reason I never added the code to make them show
+
 Fixed the saving/loading failsafe
 
 Fixed currency
@@ -13,8 +31,6 @@ Fixed currency
 Fixed jobs not showing as working on reload
 
 Fixed jobs and upgrades not greying out
-
-Added the functionality for x100 and x1000 building buys, as for some reason I never added the code to make them show
 
 # Version 0.11.1a
 #### 05:39PM 10/10/2017
